@@ -1,0 +1,14 @@
+/nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+\lib
+\resource
+.nb-gradle/
+LAST_VISITED.html
+/crawl-data
+/sample-data
+webjava.mallet
+output.csv
