@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
- * @author susanti_2
+ * @author Susanti 
  */
 public class TAScraper {
 
@@ -279,10 +279,10 @@ public class TAScraper {
 
     public static void main(String[] args) {
         //set proxy
-        String host = "cache.itb.ac.id";
-        String port = "8080";
-        String username = "susanti.gojali";
-        String password = "110294";
+        String host = "host";
+        String port = "port";
+        String username = "username";
+        String password = "password";
 
         String url = "https://www.tripadvisor.co.id/Restaurant_Review-g297704-d808584-Reviews-Atmosphere_Resort_Cafe-Bandung_West_Java_Java.html";
         int n = 50; //Jumlah review(kelipatan 10)
