@@ -19,6 +19,12 @@ public class ReviewReader {
     private static final int REVIEW_TITLE = 0;
     private static final int REVIEW_TEXT = 1;
 
+    /**
+     * Parsing review from the file
+     * @param fileName file name
+     * @return list of reviews
+     * @throws FileNotFoundException Exception if file can not be found
+     */
     public static ArrayList<Review> readReviewFromFile(String fileName) throws FileNotFoundException {
 
         ArrayList<Review> reviews = new ArrayList<>();
