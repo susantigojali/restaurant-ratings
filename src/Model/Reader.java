@@ -1,19 +1,16 @@
-package DataProcessing;
+package Model;
 
-import Model.Review;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author susanti_2
  */
-public class ReviewReader {
+public class Reader {
 
     private static final String DELIMITER = ";";
     private static final int REVIEW_TITLE = 0;
@@ -21,6 +18,7 @@ public class ReviewReader {
 
     /**
      * Parsing review from the file
+     *
      * @param fileName file name
      * @return list of reviews
      * @throws FileNotFoundException Exception if file can not be found
@@ -45,8 +43,33 @@ public class ReviewReader {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(Preprocess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("IO Exception: readReviewFromFile");
         }
         return reviews;
     }
+    
+    /**
+     * Read reviews text from the file
+     *
+     * @param fileName file name
+     * @return list of reviews text
+     * @throws FileNotFoundException Exception if file can not be found
+     */
+    public static ArrayList<String> readReviewText(String fileName) throws FileNotFoundException {
+        ArrayList<String> reviewsText = new ArrayList<>();
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+
+        try {
+            String line;
+            while ((line = fileReader.readLine()) != null) {
+                reviewsText.add(line);
+            }
+            
+        } catch (IOException ex) {
+            System.out.println("IO Exception: readReviewText");
+        }
+
+        return reviewsText;
+    }
+
 }
