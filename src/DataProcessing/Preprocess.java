@@ -236,14 +236,14 @@ public class Preprocess {
     }
 
     /**
-     * Create data train for HMM from file
+     * Create data train for sequence tagging from file
      * @param inputFile input file name
      * @param outputFile output file name
      * @param type type : 0 = lexical and postag, 1 = lexical, 2 = postag
      * @throws FileNotFoundException Exception file not found
      * @throws IOException IO Exception
      */
-    public static void preprocessDataforHMM(String inputFile, String outputFile, int type) throws FileNotFoundException, IOException {
+    public static void preprocessDataforSequenceTagging(String inputFile, String outputFile, int type) throws FileNotFoundException, IOException {
         ArrayList<String> reviewsText = Reader.readReviewText(inputFile);
 
         //write data to file
@@ -296,7 +296,7 @@ public class Preprocess {
         String outputFile = "dataset/HMM/HMMtrainFull.csv";
         int type = 0;
         try {
-            Preprocess.preprocessDataforHMM(inputFile, outputFile, type);
+            Preprocess.preprocessDataforSequenceTagging(inputFile, outputFile, type);
         } catch (IOException ex) {
             Logger.getLogger(Preprocess.class.getName()).log(Level.SEVERE, null, ex);
         }
