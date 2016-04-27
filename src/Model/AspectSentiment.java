@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Objects;
+
 /**
  *
  * @author susanti_2
@@ -64,4 +66,27 @@ public class AspectSentiment {
     public boolean isNetral(){
         return orientation == 0;
     }
+    
+    @Override
+    public boolean equals(Object ob) {
+        if (ob instanceof AspectSentiment) {
+            AspectSentiment as = (AspectSentiment) ob;
+            if (aspect.equals(as.aspect)
+                    && sentiment.equals(as.sentiment)
+                    && orientation==as.orientation)
+                return true;
+        }
+        return false;
+   }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.aspect);
+        hash = 11 * hash + Objects.hashCode(this.sentiment);
+        hash = 11 * hash + this.orientation;
+        return hash;
+    }
+
+
 }
