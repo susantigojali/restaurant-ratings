@@ -1,5 +1,6 @@
 package Model;
 
+import cc.mallet.types.Sequence;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,6 +16,8 @@ public class Reader {
     private static final String DELIMITER = ";";
     private static final int REVIEW_TITLE = 0;
     private static final int REVIEW_TEXT = 1;
+
+    private static final String SPACE = " ";
 
     /**
      * Parsing review from the file
@@ -47,7 +50,7 @@ public class Reader {
         }
         return reviews;
     }
-    
+
     /**
      * Read reviews text from the file
      *
@@ -64,12 +67,51 @@ public class Reader {
             while ((line = fileReader.readLine()) != null) {
                 reviewsText.add(line);
             }
-            
+
         } catch (IOException ex) {
             System.out.println("IO Exception: readReviewText");
         }
 
         return reviewsText;
+    }
+
+    /**
+     * Read sequence from file 
+     * @param fileName sequence tagging file
+     * @return List of Sequence Tagging
+     * @throws FileNotFoundException Exception if file can not be found
+     */
+    public static ArrayList<SequenceTagging> readSequenceInput(String fileName) throws FileNotFoundException {
+        ArrayList<SequenceTagging> sequenceTaggings = new ArrayList<>();
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+        
+        try {
+            String line;
+            ArrayList<Feature> sequenceInput = new ArrayList();
+
+            while ((line = fileReader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    String[] token = line.split(SPACE);
+                    assert token.length == 2;
+                    sequenceInput.add(new Feature(token[0], token[1]));
+                } else {
+                    if (!sequenceInput.isEmpty()) {
+                        SequenceTagging st = new  SequenceTagging(sequenceInput, new Sequence[0]);
+                        sequenceTaggings.add(st);
+                        sequenceInput =  new ArrayList();
+                    }
+                }
+            }
+            if (!sequenceInput.isEmpty()) {
+                sequenceTaggings.add(new SequenceTagging(sequenceInput, new Sequence[0]));
+                sequenceInput =  new ArrayList();
+            }
+            
+        } catch (IOException ex) {
+            System.out.println("IO Exception: readSequenceTagging");
+        }
+        
+        return sequenceTaggings;
     }
 
 }
