@@ -5,11 +5,9 @@ import IndonesianNLP.IndonesianSentenceDetector;
 import IndonesianNLP.IndonesianSentenceFormalization;
 import Model.Reader;
 import inanlp.IndonesianSentenceFormalizer;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,10 +26,6 @@ public class Preprocess {
     private static final String DELIMITER = ";";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String FILE_HEADER = "no;sentence;formalized_sentence;class;sentence_position";
-
-    private static final String SPACE = " ";
-//    private static final String EMOTICON_DICT = "dict/emoticon_dict.txt";
-//    private static final String FOREIGN_WORD_DICT = "dict/fw_dict.txt";
 
     /**
      * Split sentences to list of sentence
@@ -82,21 +76,6 @@ public class Preprocess {
      */
     public static String formalizeForeignWord(String sentence) {
         HashMap<String, String> listFW = Dictionary.getForeignWordsDict();
-
-//        try {
-//            try (BufferedReader fileReader = new BufferedReader(new FileReader(FOREIGN_WORD_DICT))) {
-//                String line;
-//                while ((line = fileReader.readLine()) != null) {
-//                    String[] entry = line.split("\t");
-//                    listFW.put(entry[0], entry[1]);
-//                }
-//            }
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("File foreign word dictionary not found");
-//        } catch (IOException ex) {
-//            System.out.println("IO Excsption: foreign word dictionary");
-//        }
-
         String newSentence = sentence;
         for (Entry<String, String> entry : listFW.entrySet()) {
             String key = entry.getKey();
@@ -115,18 +94,6 @@ public class Preprocess {
     public static ArrayList<String> getEmoticons(String sentence) {
         //init emoticon list
         ArrayList<String> emoticonDict = Dictionary.getEmoticonsDict();
-//        try {
-//            try (BufferedReader reader = new BufferedReader(new FileReader(EMOTICON_DICT))) {
-//                String line;
-//                while ((line = reader.readLine()) != null) {
-//                    emoticonDict.add(line);
-//                }
-//            }
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("File emoticon dictionary not found");
-//        } catch (IOException ex) {
-//            System.out.println("IO Excsption: emoticon dictionary");
-//        }
 
         ArrayList<String> emoticonList = new ArrayList<>();
         String[] tokens = sentence.split("\\s+");
@@ -206,7 +173,7 @@ public class Preprocess {
                     } else {
                         bw.write(0 + DELIMITER);
                     }
-                    ////
+                   
                     ArrayList<String> emoticons = getEmoticons(reviewText.get(i).toLowerCase());
                     if (!emoticons.isEmpty()) {
                         bw.write(1 + DELIMITER);
@@ -272,58 +239,6 @@ public class Preprocess {
         }
     }
     
-    //Preprocess for classify
-    // split, lower case  remove balabaka
-    public static ArrayList<String> preprocessClassify(ArrayList<Review> reviews) {
-        ArrayList<String> reviewTexts = new ArrayList<>();
-        
-//        for (Review review : reviews) {
-//                ArrayList<String> reviewText = splitSentences(review.getText());
-//                for (int i = 0; i < reviewText.size(); i++) {
-//                    bw.write(n + DELIMITER);
-//                    n++;
-//
-//                    bw.write(reviewText.get(i).toLowerCase() + DELIMITER);
-//                    String newSentence = formalizeForeignWord(reviewText.get(i).toLowerCase());
-//                    String formalizedSentence = deleteStopword(formalizeSentence2(cleanTextForWeka(newSentence)));
-//                    bw.write(formalizedSentence + DELIMITER + "?" + DELIMITER);
-//                    System.out.println(formalizedSentence + DELIMITER);
-//
-//                    //sentence position
-//                    if (i == 0) {
-//                        bw.write(1 + DELIMITER);
-//                    } else {
-//                        bw.write(0 + DELIMITER);
-//                    }
-//                    ////
-//                    ArrayList<String> emoticons = getEmoticons(reviewText.get(i).toLowerCase());
-//                    if (!emoticons.isEmpty()) {
-//                        bw.write(1 + DELIMITER);
-//                    } else {
-//                        bw.write(0 + DELIMITER);
-//                    }
-//
-//                    if (PostagDict.containAdjective(formalizedSentence)) {
-//                        bw.write(1 + DELIMITER);
-//                    } else {
-//                        bw.write(0 + DELIMITER);
-//                    }
-//
-//                    if (PostagDict.containNegation(formalizedSentence)) {
-//                        bw.write(1 + DELIMITER);
-//                    } else {
-//                        bw.write(0 + DELIMITER);
-//                    }
-//
-//                    ArrayList<String[]> postag = Postag.doPOSTag(formalizedSentence);
-//                    String feature = Postag.createAllPostag(postag, DELIMITER);
-//                    bw.write(feature + NEW_LINE_SEPARATOR);
-//                }
-//            }
-        
-        return reviewTexts;
-    }
-
     public static void main(String[] args) {
         //NBC
 //        ArrayList<Review> reviews = new ArrayList<>();
