@@ -4,6 +4,7 @@ import Evaluator.MyPerClassAccuracyEvaluator;
 import Evaluator.Evaluation;
 import Evaluator.ConfusionMatrixEvaluator;
 import Evaluator.ConfusionMatrix;
+import Model.SequenceTagging;
 import cc.mallet.fst.CRF;
 import cc.mallet.fst.CRFTrainerByLabelLikelihood;
 import cc.mallet.fst.CRFTrainerByThreadedLabelLikelihood;
@@ -17,13 +18,17 @@ import cc.mallet.fst.Transducer;
 import cc.mallet.fst.TransducerEvaluator;
 import cc.mallet.fst.ViterbiWriter;
 import cc.mallet.pipe.Pipe;
+import cc.mallet.pipe.SerialPipes;
+import cc.mallet.pipe.SimpleTaggerSentence2TokenSequence;
 import cc.mallet.pipe.iterator.LineGroupIterator;
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.FeatureVector;
+import cc.mallet.types.Instance;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.Sequence;
 import cc.mallet.util.CommandOption;
 import cc.mallet.util.MalletLogger;
+import java.io.BufferedReader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,9 +36,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
+import java.util.ArrayList;
 
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -209,21 +216,22 @@ public class MyCRFSimpleTagger {
      * @exception Exception if an error occurs
      */
     public static void main(String[] args) throws Exception {
-        //Training CRF
+       // Training CRF
         String trainFilename = "dataset/CRF/CRFDataset.txt";
         String modelFilename = "crf.model";
         int folds = 10;
         myTrain(trainFilename, modelFilename, folds);
 
         //Classify CRF
-//        classify(args);
-//
-//        String testFilename = "dataset/HMM/testCRF.txt";
+//        String testFilename = "dataset/CRF/CRFDatatest.txt";
 //        String modelFilename = "crf.model";
 //        Boolean includeInput = true;
 //        int nBestOption = 1;
 //
-//        myClassify(testFilename, modelFilename, includeInput, nBestOption);
+//        //classify(args);
+//        ArrayList<SequenceTagging> outputs = myClassify(testFilename, modelFilename, includeInput, nBestOption);
+        
+        
     }
 
     public static void myTrain(String trainFilename, String modelFilename, int nfolds) throws FileNotFoundException, IOException {
@@ -234,11 +242,11 @@ public class MyCRFSimpleTagger {
         Pipe p = null;
         CRF crf = null;
         TransducerEvaluator eval = null;
-
+  
         p = new SimpleTagger.SimpleTaggerSentence2FeatureVectorSequence();
         p.getTargetAlphabet().lookupIndex(defaultOption.value);
 
-        p.setTargetProcessing(true);
+        p.setTargetProcessing(true);   
         data = new InstanceList(p);
         data.addThruPipe(new LineGroupIterator(trainingFile,
                 Pattern.compile("^\\s*$"), true));
@@ -306,26 +314,34 @@ public class MyCRFSimpleTagger {
 
     }
 
-    public static void myClassify(String testFilename, String modelFilename, Boolean includeInput, int nBestOption) throws FileNotFoundException, IOException, ClassNotFoundException {
+    /**
+     * return the sequence output
+     * @param testFilename filename to classify
+     * @param modelFilename model file
+     * @param includeInput if true, input will be printed
+     * @param nBestOption number of output
+     * @param inputSequences sequence of input <word, postag> and output
+     * @return list of sequence output 
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static ArrayList<SequenceTagging> myClassify(String testFilename, String modelFilename, Boolean includeInput, int nBestOption, ArrayList<SequenceTagging> inputSequences) throws FileNotFoundException, IOException, ClassNotFoundException {
         Reader testFile = null;
         InstanceList testData = null;
 
         //Load test file
-        System.out.println(">>in 1");
         testFile = new FileReader(new File(testFilename));
 
         Pipe p = null;
         CRF crf = null;
-        TransducerEvaluator eval = null;
 
         //Load Model
-        System.out.println(">>in 2");
         ObjectInputStream s = new ObjectInputStream(new FileInputStream(modelFilename));
         crf = (CRF) s.readObject();
         s.close();
         p = crf.getInputPipe();
 
-        System.out.println(">>in 3");
         p.setTargetProcessing(false);
         testData = new InstanceList(p);
         testData.addThruPipe(
@@ -334,7 +350,9 @@ public class MyCRFSimpleTagger {
 
         logger.info("Number of predicates: " + p.getDataAlphabet().size());
 
-        System.out.println(">>in 4");
+        ArrayList<SequenceTagging> outputClassify = new ArrayList<>();  
+        assert (inputSequences.size() == testData.size()); //memastikan reader sequence input jalan dengan benar
+        
         for (int i = 0; i < testData.size(); i++) {
             Sequence input = (Sequence) testData.get(i).getData();
             Sequence[] outputs = apply(crf, input, nBestOption);
@@ -348,6 +366,8 @@ public class MyCRFSimpleTagger {
                 }
             }
             if (!error) {
+                outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), outputs));
+                
                 for (int j = 0; j < input.size(); j++) {
                     StringBuffer buf = new StringBuffer();
                     for (int a = 0; a < k; a++) {
@@ -355,20 +375,24 @@ public class MyCRFSimpleTagger {
 
                     }
                     if (includeInput) {
-                        FeatureVector fv = (FeatureVector) input.get(j);
+                        FeatureVector fv = (FeatureVector) input.get(j);                 
                         buf.append(fv.toString(true));
                     }
                     System.out.println(buf.toString());
                 }
                 System.out.println();
+            } else { // jika hasil output error, kasih sequence kosong
+                outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), new Sequence[1])); //ga tau bener apa ga, sementara
             }
         }
 
         if (testFile != null) {
             testFile.close();
         }
+        
+        return outputClassify;
     }
-
+    
     public static Evaluation evaluation(CRF crf, InstanceList testing) {
         CRFTrainerByLabelLikelihood crft = new CRFTrainerByLabelLikelihood(crf);
         String description = "Testing"; //harus ini isinya
