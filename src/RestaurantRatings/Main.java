@@ -10,14 +10,18 @@ import Model.Reader;
 import Model.Review;
 import Model.SequenceTagging;
 import cc.mallet.fst.CRF;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSink;
 
@@ -28,6 +32,12 @@ import weka.core.converters.ConverterUtils.DataSink;
 public class Main {
 
     private static final String NBC_MODEL = "datatest/Model/nbc.model";
+    private static final String CRF_MODEL = "datatest/Model/crf.model";
+
+    private static final int SUBJECTIVE_INDEX = 0;
+    private static final int FORMALIZED_SENTENCE_INDEX = 0;
+
+    private static final String NEW_LINE_SEPARATOR = "\n";
 
     /**
      * read model from file
@@ -47,25 +57,34 @@ public class Main {
      * Prepare data for annotation (NBC Learning)
      */
     public static void prepareDataLearningNBC() {
-        String rawFilename = "datatest/DataLearningNBC2 (120).txt";
-        try {
-            //Read review from file
-            ArrayList<Review> reviews = Reader.readReviewFromFile(rawFilename);
 
-            //Preprocess
-            String dataNBC = "datatest/NBC/DataLearningNBC2 (120) NBCAnotasi.csv";
-            Preprocess.preprocessDataforNBC(reviews, dataNBC, false);
+        String rawFilename = "crawl-data/DataLearningNBC3 (120).csv";
+        String dataNbcCsv = "dataset/NBC/DataLearningNBC3 (120) NBCAnotasi.csv";
+        String dataNbcArff = "dataset/NBC/DataLearningNBC3 (120) NBCAnotasi.arff";
+        classifyNBC(rawFilename, dataNbcCsv, dataNbcArff, true);
 
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found exception");
-        } catch (IOException ex) {
-            System.out.println("IO Exception");
+    }
+
+    public static void saveSubjectiveInstance(String filename, Instances instances) throws IOException {
+        File file = new File(filename);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        FileWriter fw = new FileWriter(file);
+        try (BufferedWriter bw = new BufferedWriter(fw)) {
+            for (Instance inst : instances) {
+                if (inst.classAttribute().value((int) inst.classValue()).equals(inst.attribute(inst.classAttribute().index()).value(SUBJECTIVE_INDEX))) {
+                    bw.write(inst.stringValue(FORMALIZED_SENTENCE_INDEX) + NEW_LINE_SEPARATOR);
+                }
+            }
         }
     }
 
     public static void main(String args[]) {
         try {
-            startApp();
+            prepareDataLearningNBC();
+//            startApp();
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,43 +93,17 @@ public class Main {
     //for testing
     /**
      * run the application
+     *
      * @throws Exception
      */
     public static void startApp() throws Exception {
         //Step 1 Subjectivity Classification
-        String rawFilename = "datatest/RawDatatest.txt";
-        try {
-            //Read review from file
-            ArrayList<Review> reviews = Reader.readReviewFromFile(rawFilename);
-
-            //Preprocess
-            String dataNbcCsv = "datatest/NBCData.csv";
-            String dataNbcArff = "datatest/NBCData.arff";
-            Preprocess.preprocessDataforNBC(reviews, dataNbcCsv, false);
-            Csv2Arff.convert(dataNbcCsv, dataNbcArff);
-
-            //load ARFF datatest
-            Instances dataTest = WekaHelper.loadDataFromFile(dataNbcArff);
-            dataTest.setClassIndex(1);
-
-            //load model
-            NaiveBayes NB = (NaiveBayes) WekaHelper.loadModelFromFile(NBC_MODEL);
-
-            //Classification
-            Instances unlabeledData = WekaHelper.removeAttribute(dataTest, "1"); //remove attribute formalized_sentence
-            for (int i = 0; i < unlabeledData.size(); i++) {
-                double label = NB.classifyInstance(unlabeledData.instance(i));
-                unlabeledData.instance(i).setClassValue(label);
-                dataTest.instance(i).setClassValue(label);
-            }
-
-            DataSink.write(System.out, dataTest);
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found exception");
-        } catch (IOException ex) {
-            System.out.println("IO Exception");
-        }
+        String rawFilename = "datatest/NBC/RawDatatest.txt";
+        String dataNbcCsv = "datatest/NBC/NBCData.csv";
+        String dataNbcArff = "datatest/NBC/NBCData.arff";
+       
+        classifyNBC(rawFilename, dataNbcCsv, dataNbcArff, false);
+        
         System.exit(-1);
 
         //Step 2
@@ -148,4 +141,57 @@ public class Main {
         //Hitung Rating: to do
     }
 
+    private static void classifyNBC(String rawFilename, String dataNbcCsv, String dataNbcArff, boolean isLearning) {
+        //Step 1 Subjectivity Classification
+        //String rawFilename = "datatest/NBC/RawDatatest.txt";
+        try {
+            //Read review from file
+            ArrayList<Review> reviews = Reader.readReviewFromFile(rawFilename);
+
+            //Preprocess
+            //String dataNbcCsv = "datatest/NBC/NBCData.csv";
+            //String dataNbcArff = "datatest/NBC/NBCData.arff";
+            Preprocess.preprocessDataforNBC(reviews, dataNbcCsv);
+            Csv2Arff.convert(dataNbcCsv, dataNbcArff);
+
+            //load ARFF datatest
+            Instances dataTest = WekaHelper.loadDataFromFile(dataNbcArff);
+            dataTest.setClassIndex(1);
+
+            //load model
+            NaiveBayes NB = (NaiveBayes) WekaHelper.loadModelFromFile(NBC_MODEL);
+
+            //Classification
+            Instances unlabeledData = WekaHelper.removeAttribute(dataTest, "1"); //remove attribute formalized_sentence
+            for (int i = 0; i < unlabeledData.size(); i++) {
+                double label = NB.classifyInstance(unlabeledData.instance(i));
+                unlabeledData.instance(i).setClassValue(label);
+                dataTest.instance(i).setClassValue(label);
+            }
+
+            DataSink.write(System.out, dataTest);
+
+            printLabel(dataTest);
+
+            if (!isLearning) {
+                //Save data with label subjective
+                String filename = "datatest/CRF/rawdata.txt";
+                saveSubjectiveInstance(filename, dataTest);
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found exception");
+        } catch (IOException ex) {
+            System.out.println("IO Exception");
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static void printLabel(Instances instances) {
+        System.out.println("\nLabel==========");
+        for (Instance inst : instances) {
+            System.out.println(inst.classAttribute().value((int) inst.classValue()));
+        }
+    }
 }
