@@ -18,7 +18,8 @@ public class Postag {
             + "transitive_verb;preprosition;modal;coor_conjuction;subor_conjunction;"
             + "determiner;interjection;ordinal_numerals;collective_numerals;"
             + "primary_numerals;irregular_numerals;personal_pronouns;wh_pronouns;"
-            + "number_pronouns;locative_pronouns;negation;symbols;particles;foreign_word";
+            + "number_pronouns;locative_pronouns;negation;symbols;particles;foreign_word;"
+            + "pronouns;bilangan";
 
     private static final String OPEN_PARENTHESIS = "(";
     private static final String CLOSE_PARENTHESIS = ")";
@@ -57,7 +58,8 @@ public class Postag {
     private static final String PARTICLES = "RP";
     private static final String FOREIGN_WORDS = "FW";
 
-    private static final String[] PRONOUN = {PERSONAL_PRONOUNS, WH_PRONOUNS, NUMBER_PRONOUNS, LOCATIVE_PRONOUNS};
+    private static final String[] PRONOUNS = {PERSONAL_PRONOUNS, WH_PRONOUNS, NUMBER_PRONOUNS, LOCATIVE_PRONOUNS};
+    private static final String[] NUMERALS = {ORDINAL_NUMBERALS, COLLECTIVE_NUMBERALS, PRIMARY_NUMBERALS, IRREGULAR_NUMBERALS};
     private static final String CARDINAL_NUMBER = PRIMARY_NUMBERALS;
     private static final String[] PUNCTUATION = {COMMA, SENTENCE_TERMINATOR};
 
@@ -252,11 +254,21 @@ public class Postag {
             feature = feature + "0" + delimiter;
         }
         if (containForeignWords(sentence)) {
-            feature = feature + "1";
+            feature = feature + "1" + delimiter;
         } else {
-            feature = feature + "0";
+            feature = feature + "0" + delimiter;
         }
-
+        if (containPronouns(sentence)) {
+            feature = feature + "1" + delimiter;
+        } else {
+            feature = feature + "0" + delimiter;
+        }
+        if (containNumerals(sentence)) {
+            feature = feature + "1" ;
+        } else {
+            feature = feature + "0" ;
+        }
+        
         return feature;
     }
 
@@ -273,16 +285,34 @@ public class Postag {
     }
 
     /**
-     * return true if this sentence contain pronoun
+     * return true if this sentence contain pronouns
      *
      * @param sentence sentence
-     * @return true if this sentence contain pronoun
+     * @return true if this sentence contain pronouns
      */
-    public static boolean containPronoun(ArrayList<String[]> sentence) {
+    public static boolean containPronouns(ArrayList<String[]> sentence) {
         boolean found = false;
         int i = 0;
-        while (!found && i < PRONOUN.length) {
-            if (contain(sentence, PRONOUN[i])) {
+        while (!found && i < PRONOUNS.length) {
+            if (contain(sentence, PRONOUNS[i])) {
+                found = true;
+            }
+            i++;
+        }
+        return found;
+    }
+    
+    /**
+     * return true if this sentence contain numerals
+     *
+     * @param sentence sentence
+     * @return true if this sentence contain numerals
+     */
+    public static boolean containNumerals(ArrayList<String[]> sentence) {
+        boolean found = false;
+        int i = 0;
+        while (!found && i < NUMERALS.length) {
+            if (contain(sentence, NUMERALS[i])) {
                 found = true;
             }
             i++;

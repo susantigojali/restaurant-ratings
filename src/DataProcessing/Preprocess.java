@@ -25,7 +25,8 @@ public class Preprocess {
     //Delimiter used in CSV file
     private static final String DELIMITER = ";";
     private static final String NEW_LINE_SEPARATOR = "\n";
-    private static final String FILE_HEADER = "no;sentence;formalized_sentence;class;sentence_position";
+    private static final String FILE_HEADER_ANNOTATION = "no;sentence;formalized_sentence;class;sentence_position";
+    private static final String FILE_HEADER = "formalized_sentence;class;sentence_position";
 
     /**
      * Split sentences to list of sentence
@@ -37,11 +38,13 @@ public class Preprocess {
         IndonesianSentenceDetector isd = new IndonesianSentenceDetector();
         ArrayList<String> sentencesList = isd.splitSentence(sentences);
 
-//        ArrayList<String> sentence = new ArrayList<>();
-//        for (String s : sentencesList) {
-//            String[] splits = s.split("\\.|\\?|!");
-//            sentence.addAll(Arrays.asList(splits));
-//        }
+//        ArrayList<String> sentencesList = new ArrayList<>();
+//        String[] splits = sentences.split("\\.|\\?|!");
+//        for (int i = 0; i < splits.length; i++) {
+//            if (!splits[i].isEmpty()) {
+//                sentencesList.add(splits[i].toString());
+//            }
+//        }   
         return sentencesList;
     }
 
@@ -136,9 +139,10 @@ public class Preprocess {
      *
      * @param reviews raw data of review
      * @param filename CSV format file name
+     * @param isAnnotation true if preprocess for annotation, false if preprocess for testing application
      * @throws java.io.IOException Exception
      */
-    public static void preprocessDataforNBC(ArrayList<Review> reviews, String filename) throws IOException {
+    public static void preprocessDataforNBC(ArrayList<Review> reviews, String filename, boolean isAnnotation) throws IOException {
         //write data to file
         File file = new File(filename);
         // creates the file
@@ -149,21 +153,26 @@ public class Preprocess {
         FileWriter fw = new FileWriter(file);
         try (BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write("sep=" + DELIMITER + NEW_LINE_SEPARATOR);
-            String fileHeader = FILE_HEADER + DELIMITER
-                    + "emoticon" + DELIMITER + "adj_dict" + DELIMITER
-                    + "neg_dict" + DELIMITER
-                    + Postag.HEADER;
+            String fileHeader;
+            if (isAnnotation) {
+                fileHeader = FILE_HEADER_ANNOTATION;
+            } else {
+                fileHeader = FILE_HEADER ;
+            }
+            fileHeader += DELIMITER + "emoticon" + DELIMITER + "adj_dict" + DELIMITER
+                        + "neg_dict" + DELIMITER + Postag.HEADER;
             bw.write(fileHeader + NEW_LINE_SEPARATOR);
 
             int n = 1;
             for (Review review : reviews) {
                 ArrayList<String> reviewText = splitSentences(review.getText());
                 for (int i = 0; i < reviewText.size(); i++) {
-                    bw.write(n + DELIMITER);
+                    if (isAnnotation) {
+                        bw.write(n + DELIMITER);
+                        bw.write(reviewText.get(i).toLowerCase() + DELIMITER);
+                    }
                     n++;
-
-                    bw.write(reviewText.get(i).toLowerCase() + DELIMITER);
-                    String newSentence = formalizeForeignWord(reviewText.get(i).toLowerCase());
+                    String newSentence = formalizeForeignWord(reviewText.get(i).toLowerCase().replaceAll("\\.(\\.)*", "\\."));
                     String formalizedSentence = deleteStopword(formalizeSentence2(cleanTextForWeka(newSentence)));
                     bw.write(formalizedSentence + DELIMITER + "?" + DELIMITER);
 
@@ -240,23 +249,24 @@ public class Preprocess {
     }
     
     public static void main(String[] args) {
-        //NBC
+        //Prepare data NBC for learning
 //        ArrayList<Review> reviews = new ArrayList<>();
 //
-//        String fileInput = "crawl-data/Test1_FULL_SAMPLE (120).csv";
+//        String fileInput = "crawl-data/DataLearningNBC2 (120).csv";
 //        try {
 //            reviews = Reader.readReviewFromFile(fileInput);
 //        } catch (FileNotFoundException ex) {
 //            System.out.println("File not found");
 //        }
 //
-//        String filename = "dataset/testes.csv";
+//        String filename = "dataset/NBC/DataLearningNBC2 (120) NBCAnotasi new.csv";
 //        try {
-//            Preprocess.preprocessDataforNBC(reviews, filename);
+//            Preprocess.preprocessDataforNBC(reviews, filename, true);
 //        } catch (IOException ex) {
 //            Logger.getLogger(Preprocess.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
+//        System.exit(-1);
+        
         //HMM
         String inputFile = "dataset/HMM/rawdata.txt";        
         String outputFile = "dataset/HMM/HMMtrainFull.csv";
@@ -269,17 +279,13 @@ public class Preprocess {
         
         ////////////
         
-//        String sentence = "Biasanya untuk cari suasana indah hrs ke daerah Dago dll ? Ini tengah kota tapi suasana ya ga kalah cantik.. Saya suka makanannya.. Suasana nya.. Rasanya.. Harga emang aga mahal tapi untuk kepuasan yg didapat.. Relaaaaa";
-//        sentence = "pada saat saya datang hari minggu pk.08.00 sepi tapi pada saat saya selesai banyak orang menunggu di luar .";
-//        //System.out.println(Preprocess.cleanTextForWeka(Preprocess.formalizeSentence2(sentence).replaceAll("\"|%", "")));
-//
-//        sentence = Preprocess.deleteStopword(formalizeSentence2(Preprocess.formalizeForeignWord(Preprocess.deleteStopword(sentence))));
-//
-//        String newSentence = formalizeForeignWord(sentence);
-//        String formalizedSentence = deleteStopword(formalizeSentence2(cleanTextForWeka(newSentence)));
+        String sentence = "Romantic Dinner,Makanan dan cafenya oke banget... ss";
+        
+        String newSentence = formalizeForeignWord(sentence);
+        String formalizedSentence = deleteStopword(formalizeSentence2(cleanTextForWeka(newSentence)));
+        
 
-//        ArrayList<String> splits = Preprocess.splitSentences(sentence);
-//        //ArrayList<String> splits = Preprocess.splitSentences(Preprocess.deleteStopword(formalizeSentence2(sentence)));
+//        ArrayList<String> splits = Preprocess.splitSentences(formalizedSentence);
 //        for (String split : splits) {
 //            System.out.println(split);
 //        }
@@ -289,5 +295,5 @@ public class Preprocess {
 //            System.out.println(doPOSTag1[0] + " " + doPOSTag1[1]);
 //        }
     }
-
+           
 }
