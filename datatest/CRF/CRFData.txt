@@ -1,0 +1,53 @@
+cafe NN
+sekaligus SC
+restaurant NN
+ini DT
+pemandangannya NN
+sangat RB
+bagus NN
+. .
+
+cocok JJ
+untuk IN
+para DT
+pasangan NN
+yang SC
+mau CC
+candle NN
+lampu NN
+dinner NN
+. .
+
+tetapi CC
+untuk IN
+makana NN
+malam NN
+sama JJ
+keluarga NN
+juga RB
+sangat RB
+direkomendasikan VBT
+. .
+
+bandung NN
+memang RB
+banyak JJ
+punya VBT
+tempat NN
+yang SC
+bagus NN
+dan CC
+bagus NN
+pemandangan NN
+. .
+
+secara IN
+harga NN
+juga RB
+sesuai RB
+dengan IN
+pemandangan NN
+yang SC
+didapat VBT
+. .
+
