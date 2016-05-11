@@ -35,7 +35,7 @@ public class Wordnet {
      */
     public static double jcn(String word1, String word2) {
         rc = new JiangConrath(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -47,7 +47,7 @@ public class Wordnet {
      */
     public static double wup(String word1, String word2) {
         rc = new WuPalmer(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -59,7 +59,7 @@ public class Wordnet {
      */
     public static double lin(String word1, String word2) {
         rc = new Lin(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -71,7 +71,7 @@ public class Wordnet {
      */
     public static double path(String word1, String word2) {
         rc = new Path(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -83,7 +83,7 @@ public class Wordnet {
      */
     public static double res(String word1, String word2) {
         rc = new Resnik(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -95,7 +95,7 @@ public class Wordnet {
      */
     public static double lch(String word1, String word2) {
         rc = new LeacockChodorow(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -107,7 +107,7 @@ public class Wordnet {
      */
     public static double lesk(String word1, String word2) {
         rc = new Lesk(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     /**
@@ -119,7 +119,7 @@ public class Wordnet {
      */
     public static double hso(String word1, String word2) {
         rc = new HirstStOnge(db);
-        return measure(word1, word2);
+        return calculateSimilarity(word1, word2);
     }
     
     private static double calculateSimilarity(String word1, String word2) {
