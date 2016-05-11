@@ -83,8 +83,8 @@ public class Main {
 
     public static void main(String args[]) {
         try {
-            prepareDataLearningNBC();
-//            startApp();
+//            prepareDataLearningNBC();
+            startApp();
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,7 +96,7 @@ public class Main {
      *
      * @throws Exception
      */
-    public static void startApp() throws Exception {
+    public static void startApp() {
         //Step 1 Subjectivity Classification
         String rawFilename = "datatest/NBC/RawDatatest.txt";
         String dataNbcCsv = "datatest/NBC/NBCData.csv";
@@ -104,21 +104,20 @@ public class Main {
        
         classifyNBC(rawFilename, dataNbcCsv, dataNbcArff, false);
         
-        System.exit(-1);
-
         //Step 2
-        String modelFilename = "crf.model";
-        String crfFilename = "dataset/CRF/CRFDatatest.txt";
+        String rawCrfFilename = "datatest/CRF/rawdata.txt";
+        String dataCRF = "datatest/CRF/CRFData.txt";
         Boolean includeInput = true;
         int nBestOption = 1;
 
         try {
-            //Preprocess CRF : to do
-
+            //Preprocess CRF 
+            Preprocess.preprocessDataforSequenceTagging(rawCrfFilename, dataCRF, false);
+            
             //Klasifikasi CRF
-            ArrayList<SequenceTagging> inputSequence = Reader.readSequenceInput(crfFilename);
-            ArrayList<SequenceTagging> outputs = MyCRFSimpleTagger.myClassify(crfFilename, modelFilename, includeInput, nBestOption, inputSequence);
-
+            ArrayList<SequenceTagging> inputSequence = Reader.readSequenceInput(dataCRF);
+            ArrayList<SequenceTagging> outputs = MyCRFSimpleTagger.myClassify(dataCRF, CRF_MODEL, includeInput, nBestOption, inputSequence);
+            
             //Extract Aspect and Opinion
             for (SequenceTagging output : outputs) {
                 ArrayList<AspectSentiment> as = Postprocess.findAspectSentiment(output);
