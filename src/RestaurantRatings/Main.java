@@ -4,6 +4,7 @@ import DataProcessing.Postprocess;
 import DataProcessing.Preprocess;
 import Learning.MyCRFSimpleTagger;
 import Learning.WekaHelper;
+import Model.AspectAggregation;
 import Model.AspectSentiment;
 import Model.Csv2Arff;
 import Model.Reader;
@@ -18,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.bayes.NaiveBayes;
@@ -32,7 +34,7 @@ import weka.core.converters.ConverterUtils.DataSink;
 public class Main {
 
     private static final String NBC_MODEL = "datatest/Model/nbc.model";
-    private static final String CRF_MODEL = "datatest/Model/crf.model";
+    private static final String CRF_MODEL = "datatest/Model/crf1 baru.model";
 
     private static final int SUBJECTIVE_INDEX = 0;
     private static final int FORMALIZED_SENTENCE_INDEX = 0;
@@ -94,7 +96,6 @@ public class Main {
     /**
      * run the application
      *
-     * @throws Exception
      */
     public static void startApp() {
         //Step 1 Subjectivity Classification
@@ -119,25 +120,40 @@ public class Main {
             ArrayList<SequenceTagging> outputs = MyCRFSimpleTagger.myClassify(dataCRF, CRF_MODEL, includeInput, nBestOption, inputSequence);
             
             //Extract Aspect and Opinion
+            ArrayList<AspectSentiment> as = new ArrayList<>();
             for (SequenceTagging output : outputs) {
-                ArrayList<AspectSentiment> as = Postprocess.findAspectSentiment(output);
-                System.out.println("____________________________");
-                for (int j = 0; j < as.size(); j++) {
-                    System.out.println("index: " + j);
-                    as.get(j).print();
-                }
-                System.out.println("____________________________");
+                as.addAll(Postprocess.findAspectSentiment(output));    
             }
-
+            
+            System.out.println("\n\nEkstrak pasangan aspek dan sentimen----------------------");
+            System.out.println("____________________________");
+            for (int j = 0; j < as.size(); j++) {
+                System.out.println("index: " + j);
+                as.get(j).print();
+            }
+            System.out.println("____________________________");
+            
+            //Agregasi Aspek
+            System.out.println("\n\nAgregasi Aspek-------------------------");
+            LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation = AspectAggregation.aggregation(as);
+            System.out.print("\n\nTotal Category :"+ aggregation.size());
+            for (String key : aggregation.keySet()) {
+                ArrayList<AspectSentiment> value = aggregation.get(key);
+                System.out.println("\n"+key + "========= " );
+                for (int i = 0; i < value.size(); i++) {
+                    System.out.println(value.get(i).getAspect()+ " => " + value.get(i).getSentiment());
+                }
+            }
+            
+            //Hitung Rating: to do
+            
+            
         } catch (IOException ex) {
             System.out.println("IO Exeption");
         } catch (ClassNotFoundException ex) {
             System.out.println("Class not found exception");
         }
 
-        //Step 3
-        //Agregasi Aspek: to do
-        //Hitung Rating: to do
     }
 
     private static void classifyNBC(String rawFilename, String dataNbcCsv, String dataNbcArff, boolean isLearning) {
