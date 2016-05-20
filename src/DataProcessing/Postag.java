@@ -21,47 +21,47 @@ public class Postag {
             + "number_pronouns;locative_pronouns;negation;symbols;particles;foreign_word;"
             + "pronouns;bilangan";
 
-    private static final String OPEN_PARENTHESIS = "(";
-    private static final String CLOSE_PARENTHESIS = ")";
-    private static final String SLASH = "GM";
-    private static final String SEMICOLON = ";";
-    private static final String COLON = ":";
-    private static final String QUOTATION1 = "\"";
-    private static final String QUOTATION2 = "\'";
-    private static final String SENTENCE_TERMINATOR = "."; //.?!
-    private static final String COMMA = ",";
-    private static final String DASH = "-";
-    private static final String ELLIPSIS = "...";
-    private static final String ADJECTIVE = "JJ";
-    private static final String ADVERB = "RB";
-    private static final String COMMON_NOUN = "NN";
-    private static final String PROPER_NOUN = "NNP";
-    private static final String GENITIVE_NOUN = "NNG";
-    private static final String INTRANSITIVE_VERB = "VBI";
-    private static final String TRANSITIVE_VERB = "VBT";
-    private static final String PREPROSITION = "IN";
-    private static final String PERSONAL_PRONOUNS = "PRP";
-    private static final String MODAL = "MD";
-    private static final String COOR_CONJUNCTION = "CC";
-    private static final String SUBOR_CONJUNCTION = "SC";
-    private static final String DETERMINER = "DT";
-    private static final String INTERJECTION = "UH";
-    private static final String ORDINAL_NUMBERALS = "CDO";
-    private static final String COLLECTIVE_NUMBERALS = "CDC";
-    private static final String PRIMARY_NUMBERALS = "CDP";
-    private static final String IRREGULAR_NUMBERALS = "CDI";
-    private static final String WH_PRONOUNS = "WP";
-    private static final String NUMBER_PRONOUNS = "PRN";
-    private static final String LOCATIVE_PRONOUNS = "PRL";
-    private static final String NEGATION = "NEG";
-    private static final String SYMBOLS = "SYM";
-    private static final String PARTICLES = "RP";
-    private static final String FOREIGN_WORDS = "FW";
+    public static final String OPEN_PARENTHESIS = "(";
+    public static final String CLOSE_PARENTHESIS = ")";
+    public static final String SLASH = "GM";
+    public static final String SEMICOLON = ";";
+    public static final String COLON = ":";
+    public static final String QUOTATION1 = "\"";
+    public static final String QUOTATION2 = "\'";
+    public static final String SENTENCE_TERMINATOR = "."; //.?!
+    public static final String COMMA = ",";
+    public static final String DASH = "-";
+    public static final String ELLIPSIS = "...";
+    public static final String ADJECTIVE = "JJ";
+    public static final String ADVERB = "RB";
+    public static final String COMMON_NOUN = "NN";
+    public static final String PROPER_NOUN = "NNP";
+    public static final String GENITIVE_NOUN = "NNG";
+    public static final String INTRANSITIVE_VERB = "VBI";
+    public static final String TRANSITIVE_VERB = "VBT";
+    public static final String PREPROSITION = "IN";
+    public static final String PERSONAL_PRONOUNS = "PRP";
+    public static final String MODAL = "MD";
+    public static final String COOR_CONJUNCTION = "CC";
+    public static final String SUBOR_CONJUNCTION = "SC";
+    public static final String DETERMINER = "DT";
+    public static final String INTERJECTION = "UH";
+    public static final String ORDINAL_NUMBERALS = "CDO";
+    public static final String COLLECTIVE_NUMBERALS = "CDC";
+    public static final String PRIMARY_NUMBERALS = "CDP";
+    public static final String IRREGULAR_NUMBERALS = "CDI";
+    public static final String WH_PRONOUNS = "WP";
+    public static final String NUMBER_PRONOUNS = "PRN";
+    public static final String LOCATIVE_PRONOUNS = "PRL";
+    public static final String NEGATION = "NEG";
+    public static final String SYMBOLS = "SYM";
+    public static final String PARTICLES = "RP";
+    public static final String FOREIGN_WORDS = "FW";
 
-    private static final String[] PRONOUNS = {PERSONAL_PRONOUNS, WH_PRONOUNS, NUMBER_PRONOUNS, LOCATIVE_PRONOUNS};
-    private static final String[] NUMERALS = {ORDINAL_NUMBERALS, COLLECTIVE_NUMBERALS, PRIMARY_NUMBERALS, IRREGULAR_NUMBERALS};
-    private static final String CARDINAL_NUMBER = PRIMARY_NUMBERALS;
-    private static final String[] PUNCTUATION = {COMMA, SENTENCE_TERMINATOR};
+    public static final String[] PRONOUNS = {PERSONAL_PRONOUNS, WH_PRONOUNS, NUMBER_PRONOUNS, LOCATIVE_PRONOUNS};
+    public static final String[] NUMERALS = {ORDINAL_NUMBERALS, COLLECTIVE_NUMBERALS, PRIMARY_NUMBERALS, IRREGULAR_NUMBERALS};
+    public static final String CARDINAL_NUMBER = PRIMARY_NUMBERALS;
+    public static final String[] PUNCTUATION = {COMMA, SENTENCE_TERMINATOR};
 
     /**
      * return list of <token, POSTag> from sentence
