@@ -128,7 +128,7 @@ public class Wordnet {
         double maxScore = -1D;
         
         for(POS[] posPair: posPairs) {
-            System.out.println(posPair[0].toString() + " "+ posPair[1].toString());
+//            System.out.println(posPair[0].toString() + " "+ posPair[1].toString());
             List<Concept> synsets1 = (List<Concept>)db.getAllConcepts(word1, posPair[0].toString());
             List<Concept> synsets2 = (List<Concept>)db.getAllConcepts(word2, posPair[1].toString());
 
@@ -136,7 +136,7 @@ public class Wordnet {
                 for (Concept synset2: synsets2) {
                     Relatedness relatedness = rc.calcRelatednessOfSynset(synset1, synset2);
                     double score = relatedness.getScore();
-                    System.out.println(synset1.getSynset()+ " "+ synset2.getSynset()+ " "+score);
+//                    System.out.println(synset1.getSynset()+ " "+ synset2.getSynset()+ " "+score);
                     if (score > maxScore) { 
                         maxScore = score;
                     }
@@ -149,7 +149,6 @@ public class Wordnet {
         }
         return maxScore;
     }
-    
 
     public static void main (String args[]) {
         System.out.println(jcn("food", "menu"));
