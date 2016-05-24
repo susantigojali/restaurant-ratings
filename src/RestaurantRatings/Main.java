@@ -7,6 +7,7 @@ import Learning.WekaHelper;
 import Model.AspectAggregation;
 import Model.AspectSentiment;
 import Model.Csv2Arff;
+import Model.Rating;
 import Model.Reader;
 import Model.Review;
 import Model.SequenceTagging;
@@ -136,10 +137,12 @@ public class Main {
             //Agregasi Aspek
             System.out.println("\n\nAgregasi Aspek-------------------------");
             LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation = AspectAggregation.aggregation(as);
-            System.out.print("\n\nTotal Category :"+ aggregation.size());
+            System.out.println("\n\nTotal Category :"+ aggregation.size());
+            
             for (String key : aggregation.keySet()) {
                 ArrayList<AspectSentiment> value = aggregation.get(key);
-                System.out.println("\n"+key + "========= " );
+                double rating = Rating.getRating(value);
+                System.out.println(key + " ========= rating: " +rating);
                 for (int i = 0; i < value.size(); i++) {
                     System.out.println(value.get(i).getAspect()+ " => " + value.get(i).getSentiment());
                 }
