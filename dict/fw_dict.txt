@@ -1,6 +1,36 @@
 all u can eat	makan sepuasnya
 all you can eat	makan sepuasnya
-waiting list	daftar tunggu
+beverage	minuman
+cool	keren
+cozy	nyaman
+design	desain
+delicious	enak
+elegant	anggun
+fair	adil
+favourite	kesukaan
+fresh	segar
+food	makanan
+full	penuh
+good	bagus
+good job	kerja bagus
+i	saya
+juice	jus
+juicy	enak
 non smoking	tidak merokok
-smoking area	area merokok
 overall	secara keseluruhan
+recommended	disarankan
+relax	bersantai
+restaurant	restoran
+special	spesial
+smoking area	area merokok
+table	meja
+venue	tempat
+venuenya	tempatnya
+viewnya	pemandangannya
+view	pemandangan
+waiter	pelayan
+waiters	pelayan
+waiting list	daftar tunggu
+venue	tempat
+yummy	enak
+standard	standar
