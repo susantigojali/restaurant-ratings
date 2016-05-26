@@ -18,34 +18,31 @@ import cc.mallet.fst.Transducer;
 import cc.mallet.fst.TransducerEvaluator;
 import cc.mallet.fst.ViterbiWriter;
 import cc.mallet.pipe.Pipe;
-import cc.mallet.pipe.SerialPipes;
-import cc.mallet.pipe.SimpleTaggerSentence2TokenSequence;
 import cc.mallet.pipe.iterator.LineGroupIterator;
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.FeatureVector;
-import cc.mallet.types.Instance;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.Sequence;
 import cc.mallet.util.CommandOption;
 import cc.mallet.util.MalletLogger;
-import java.io.BufferedReader;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
-
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author susanti_2
+ */
 public class MyCRFSimpleTagger {
 
     private static Logger logger
@@ -138,87 +135,11 @@ public class MyCRFSimpleTagger {
                         numThreads
                     });
 
-    /**
-     * Command-line wrapper to train, test, or run a generic CRF-based tagger.
-     *
-     * @param args the command line arguments. Options (shell and Java quoting
-     * should be added as needed):
-     * <dl>
-     * <dt><code>--help</code> <em>boolean</em></dt>
-     * <dd>Print this command line option usage information. Give
-     * <code>true</code> for longer documentation. Default is
-     * <code>false</code>.</dd>
-     * <dt><code>--prefix-code</code> <em>Java-code</em></dt>
-     * <dd>Java code you want run before any other interpreted code. Note that
-     * the text is interpreted without modification, so unlike some other Java
-     * code options, you need to include any necessary 'new's. Default is
-     * null.</dd>
-     * <dt><code>--gaussian-variance</code> <em>positive-number</em></dt>
-     * <dd>The Gaussian prior variance used for training. Default is 10.0.</dd>
-     * <dt><code>--train</code> <em>boolean</em></dt>
-     * <dd>Whether to train. Default is <code>false</code>.</dd>
-     * <dt><code>--iterations</code> <em>positive-integer</em></dt>
-     * <dd>Number of training iterations. Default is 500.</dd>
-     * <dt><code>--test</code> <code>lab</code> or
-     * <code>seg=</code><em>start-1</em><code>.</code><em>continue-1</em><code>,</code>...<code>,</code><em>start-n</em><code>.</code><em>continue-n</em></dt>
-     * <dd>Test measuring labeling or segmentation (<em>start-i</em>,
-     * <em>continue-i</em>) accuracy. Default is no testing.</dd>
-     * <dt><code>--training-proportion</code>
-     * <em>number-between-0-and-1</em></dt>
-     * <dd>Fraction of data to use for training in a random split. Default is
-     * 0.5.</dd>
-     * <dt><code>--model-file</code> <em>filename</em></dt>
-     * <dd>The filename for reading (train/run) or saving (train) the model.
-     * Default is null.</dd>
-     * <dt><code>--random-seed</code> <em>integer</em></dt>
-     * <dd>The random seed for randomly selecting a proportion of the instance
-     * list for training Default is 0.</dd>
-     * <dt><code>--orders</code> <em>comma-separated-integers</em></dt>
-     * <dd>List of label Markov orders (main and backoff) Default is 1.</dd>
-     * <dt><code>--forbidden</code> <em>regular-expression</em></dt>
-     * <dd>If <em>label-1</em><code>,</code><em>label-2</em> matches the
-     * expression, the corresponding transition is forbidden. Default is
-     * <code>\\s</code> (nothing forbidden).</dd>
-     * <dt><code>--allowed</code> <em>regular-expression</em></dt>
-     * <dd>If <em>label-1</em><code>,</code><em>label-2</em> does not match the
-     * expression, the corresponding expression is forbidden. Default is
-     * <code>.*</code> (everything allowed).</dd>
-     * <dt><code>--default-label</code> <em>string</em></dt>
-     * <dd>Label for initial context and uninteresting tokens. Default is
-     * <code>O</code>.</dd>
-     * <dt><code>--viterbi-output</code> <em>boolean</em></dt>
-     * <dd>Print Viterbi periodically during training. Default is
-     * <code>false</code>.</dd>
-     * <dt><code>--fully-connected</code> <em>boolean</em></dt>
-     * <dd>Include all allowed transitions, even those not in training data.
-     * Default is <code>true</code>.</dd>
-     * <dt><code>--weights</code> <em>sparse|some-dense|dense</em></dt>
-     * <dd>Create sparse, some dense (using a heuristic), or dense features on
-     * transitions. Default is <code>some-dense</code>.</dd>
-     * <dt><code>--n-best</code> <em>positive-integer</em></dt>
-     * <dd>Number of answers to output when applying model. Default is 1.</dd>
-     * <dt><code>--include-input</code> <em>boolean</em></dt>
-     * <dd>Whether to include input features when printing decoding output.
-     * Default is <code>false</code>.</dd>
-     * <dt><code>--threads</code> <em>positive-integer</em></dt>
-     * <dd>Number of threads for CRF training. Default is 1.</dd>
-     * </dl>
-     * Remaining arguments:
-     * <ul>
-     * <li><em>training-data-file</em> if training </li>
-     * <li><em>training-and-test-data-file</em>, if training and testing with
-     * random split</li>
-     * <li><em>training-data-file</em> <em>test-data-file</em> if training and
-     * testing from separate files</li>
-     * <li><em>test-data-file</em> if testing</li>
-     * <li><em>input-data-file</em> if applying to new data (unlabeled)</li>
-     * </ul>
-     * @exception Exception if an error occurs
-     */
+    
     public static void main(String[] args) throws Exception {
        // Training CRF
-        String trainFilename = "dataset/CRF/CRFDataset.txt";
-        String modelFilename = "crf.model";
+        String trainFilename = "dataset/CRF/CRFDataset1 baru(205).txt";
+        String modelFilename = "dataset/CRF/crf1 baru2 anotasi dan postag baru.model";
         int folds = 10;
         myTrain(trainFilename, modelFilename, folds);
 
@@ -234,6 +155,14 @@ public class MyCRFSimpleTagger {
         
     }
 
+    /**
+     * train CRF with feature word and pos tag
+     * @param trainFilename file name 
+     * @param modelFilename file model
+     * @param nfolds number of folds for evaluation
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public static void myTrain(String trainFilename, String modelFilename, int nfolds) throws FileNotFoundException, IOException {
         Reader trainingFile = null;
         InstanceList data;
@@ -292,7 +221,6 @@ public class MyCRFSimpleTagger {
                     gaussianVarianceOption.value, crf);
 
             System.out.println("\n\nPrint model ke file..");
-            System.out.println(">> in 6");
             ObjectOutputStream s
                     = new ObjectOutputStream(new FileOutputStream(modelFilename));
             s.writeObject(crf);
@@ -307,7 +235,7 @@ public class MyCRFSimpleTagger {
         }
 
         //Confusion Matrix for All Cross Validation
-        System.out.println("======CROSS VALIDATION EVALUATION=======");
+        System.out.println("=======CROSS VALIDATION EVALUATION=======");
         ConfusionMatrix cmAll = ConfusionMatrix.getCrossValidationCM(cm);
         cmAll.printConfusionMatrix();
         cmAll.printEvaluation();
@@ -370,17 +298,17 @@ public class MyCRFSimpleTagger {
                 
                 for (int j = 0; j < input.size(); j++) {
                     StringBuffer buf = new StringBuffer();
-                    for (int a = 0; a < k; a++) {
-                        buf.append(outputs[a].get(j).toString()).append(" ");
-
-                    }
                     if (includeInput) {
-                        FeatureVector fv = (FeatureVector) input.get(j);                 
-                        buf.append(fv.toString(true));
+                        buf.append(inputSequences.get(i).getSequenceInput().get(j).getWord()).append(" ");
+                        buf.append(inputSequences.get(i).getSequenceInput().get(j).getPostag()).append(" ");
                     }
-                    System.out.println(buf.toString());
+                    
+                    for (int a = 0; a < k; a++) {
+                        buf.append(outputs[a].get(j).toString());
+                    }
+//                    System.out.println(buf.toString());
                 }
-                System.out.println();
+//                System.out.println();
             } else { // jika hasil output error, kasih sequence kosong
                 outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), new Sequence[1])); //ga tau bener apa ga, sementara
             }
@@ -393,6 +321,12 @@ public class MyCRFSimpleTagger {
         return outputClassify;
     }
     
+    /**
+     * evaluate instance list 
+     * @param crf model CRF
+     * @param testing instance for testing
+     * @return evaluation
+     */
     public static Evaluation evaluation(CRF crf, InstanceList testing) {
         CRFTrainerByLabelLikelihood crft = new CRFTrainerByLabelLikelihood(crf);
         String description = "Testing"; //harus ini isinya
@@ -412,6 +346,12 @@ public class MyCRFSimpleTagger {
         return eval;
     }
 
+    /**
+     * evaluate testing instance using model
+     * @param crf model
+     * @param testing instance for testing
+     * @return confusion matrix 
+     */
     public static ConfusionMatrix getConfusionMatrixEvaluation(CRF crf, InstanceList testing) {
         CRFTrainerByLabelLikelihood crft = new CRFTrainerByLabelLikelihood(crf);
         String description = "Testing"; //harus ini isinya
@@ -441,6 +381,7 @@ public class MyCRFSimpleTagger {
      * training data.
      * @param iterations number of training iterations
      * @param var Gaussian prior variance
+     * @param crf
      * @return the trained model
      */
     public static CRF train(InstanceList training, InstanceList testing,
