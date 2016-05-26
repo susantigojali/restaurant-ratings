@@ -55,11 +55,8 @@ public class AspectAggregation {
     public static LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation(ArrayList<AspectSentiment> aspectSentiments) throws FileNotFoundException {
         LinkedHashMap<String, ArrayList<AspectSentiment>> aspectAggregations = new LinkedHashMap<>();
         for (AspectSentiment as : aspectSentiments) {
-            
+
             String aspect = as.getAspect();
-            if (aspect.endsWith("nya")) {
-                aspect = aspect.substring(0, aspect.length()-3);
-            }
             String category = getCategory(aspect);
             System.out.println("category " + as.getAspect() + " = " + category);
             if (aspectAggregations.containsKey(category)) {
@@ -83,55 +80,73 @@ public class AspectAggregation {
      * @return category of aspect
      * @throws FileNotFoundException dictionary not found
      */
-    public static String getCategory(String aspect) throws FileNotFoundException {
+    public static String getCategory(String aspects) throws FileNotFoundException {
         if (aspectCategoryDicts.isEmpty()) {
             intDict();
         }
 
         String category = null;
-        ArrayList<String> trans = Translator.getTranslation(aspect);
+        String[] aspectList = aspects.split(" ");
+        double max = Double.NEGATIVE_INFINITY;
+        
+        boolean found = false;
+        for (String aspect : aspectList) {
+            if (aspect.endsWith("nya")) {
+                aspect = aspect.substring(0, aspect.length() - 3);
+            }
 
-        //no translate found
-        if (trans == null) {
-            category = OTHER_CATEGORY;
-        } else {
-            double max = Double.NEGATIVE_INFINITY;
-            boolean found = false;
+            ArrayList<String> trans = Translator.getTranslation(aspect);
 
             for (String categoryName : aspectCategoryDicts.keySet()) {
                 ArrayList<String> value = aspectCategoryDicts.get(categoryName);
 
                 for (int i = 0; i < value.size() && !found; i++) {
                     String cat = value.get(i);
-                    for (int j = 0; j < trans.size() && !found; j++) {
-                        if (cat.compareTo(trans.get(j)) == 0) {
+                    if (trans == null) {
+                        if (cat.compareTo(aspect) == 0) {
                             found = true;
                             category = categoryName;
                         } else {
-                            double jcn = Wordnet.jcn(trans.get(j), cat);
+                            double jcn = Wordnet.jcn(aspect, cat);
                             if (jcn > max) {
                                 max = jcn;
-                                System.out.println("max : "+ max + " "+ cat);
+                                System.out.println("max no trans " + aspect + ": " + max + " " + cat);
                                 category = categoryName;
+                            }
+                        }
+                    } else {
+                        for (int j = 0; j < trans.size() && !found; j++) {
+                            if (cat.compareTo(trans.get(j)) == 0) {
+                                found = true;
+                                category = categoryName;
+                                System.out.println("found " +trans.get(j) +" "+categoryName);
+                            } else {
+                                double jcn = Wordnet.jcn(trans.get(j), cat);
+                                if (jcn > max) {
+                                    max = jcn;
+                                    System.out.println("max " + trans.get(j) + ": " + max + " " + cat);
+                                    category = categoryName;
+                                }
                             }
                         }
                     }
                 }
             }
-            
-            if (max == 0.0) {
-                category = OTHER_CATEGORY;
-            }
         }
+        
+        if (max == 0.0) {
+            category = OTHER_CATEGORY;
+        }
+
         return category;
     }
 
     public static void main(String args[]) {
         try {
             ArrayList<AspectSentiment> aspectSentiments = new ArrayList<>();
-            aspectSentiments.add(new AspectSentiment("makanannya", "enak", 1));
-            aspectSentiments.add(new AspectSentiment("harga", "murah", 1));
-            aspectSentiments.add(new AspectSentiment("makanan", "lezat", 1));
+            aspectSentiments.add(new AspectSentiment("pizza cheese", "enak", 1));
+            aspectSentiments.add(new AspectSentiment("hargaas", "murah", 1));
+            aspectSentiments.add(new AspectSentiment("dekorasi interior", "lezat", 1));
             LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation = aggregation(aspectSentiments);
 
             System.out.println(aggregation.size());
