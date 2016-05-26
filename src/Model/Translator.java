@@ -58,7 +58,8 @@ public class Translator {
     }
     
     private static void addToDictionary(String key, String word) {
-        String trans = word.replaceAll("\\(.*\\)", "");
+        String trans = word.replaceAll("\\(.*\\)", ""); //delete ()
+        trans = trans.replaceAll("to ", ""); //delete ()
         ArrayList<String> translations = new ArrayList<>(Arrays.asList(trans.trim().split(";")));
         for (int i = 0; i < translations.size(); i++) {
             translations.set(i, translations.get(i).trim());
