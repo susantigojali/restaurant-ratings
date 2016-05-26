@@ -35,7 +35,7 @@ import weka.core.converters.ConverterUtils.DataSink;
 public class Main {
 
     private static final String NBC_MODEL = "datatest/Model/nbc.model";
-    private static final String CRF_MODEL = "datatest/Model/crf1 baru.model";
+    private static final String CRF_MODEL = "datatest/Model/crf1 (205).model";
 
     private static final int SUBJECTIVE_INDEX = 0;
     private static final int FORMALIZED_SENTENCE_INDEX = 0;
@@ -67,6 +67,52 @@ public class Main {
         classifyNBC(rawFilename, dataNbcCsv, dataNbcArff, true);
 
     }
+    
+    /**
+     * Prepare data for annotation (CRF Learning)
+     * @throws java.io.IOException
+     */
+    public static void prepareDataLearningCRF() throws IOException {
+        String rawCrfFilename = "dataset/CRF/rawdata1 (298).txt";
+        String dataCRF = "dataset/CRF/CRFAnotasi 1 (298) new(uda ga kepake).csv";
+        Preprocess.preprocessDataforSequenceTagging(rawCrfFilename, dataCRF, false);
+        
+        Boolean includeInput = true;
+        int nBestOption = 1;
+        ArrayList<SequenceTagging> inputSequence = Reader.readSequenceInput(dataCRF);
+        
+        try {
+            String dataCRFAnotasi = "dataset/CRF/CRFAnotasi 1 (298) new.csv";
+            ArrayList<SequenceTagging> outputs = MyCRFSimpleTagger.myClassify(dataCRF, CRF_MODEL, includeInput, nBestOption, inputSequence);
+            
+            saveClassifyCRF(dataCRFAnotasi, outputs);
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("file not found");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("class not found");
+        }
+    }
+    
+    //save to file CRF yang udah dilabelim
+    private static void saveClassifyCRF(String filename, ArrayList<SequenceTagging> outputs) throws IOException {
+        File file = new File(filename);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        FileWriter fw = new FileWriter(file);
+        try (BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write("sep=;" + NEW_LINE_SEPARATOR);
+            for (SequenceTagging output : outputs) {
+                for (int i = 0; i < output.getSequenceInput().size(); i++) {
+                    bw.write(output.getSequenceInput().get(i).getWord() + ";" + output.getSequenceInput().get(i).getPostag() + ";");
+                    bw.write(output.getOutput()[0].get(i).toString() + NEW_LINE_SEPARATOR);
+                }
+                bw.write(NEW_LINE_SEPARATOR);
+            }
+        }
+    }
 
     public static void saveSubjectiveInstance(String filename, Instances instances) throws IOException {
         File file = new File(filename);
@@ -87,6 +133,7 @@ public class Main {
     public static void main(String args[]) {
         try {
 //            prepareDataLearningNBC();
+//            prepareDataLearningCRF();
             startApp();
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,7 +152,7 @@ public class Main {
         String dataNbcArff = "datatest/NBC/NBCData.arff";
        
         classifyNBC(rawFilename, dataNbcCsv, dataNbcArff, false);
-        
+       
         //Step 2
         String rawCrfFilename = "datatest/CRF/rawdata.txt";
         String dataCRF = "datatest/CRF/CRFData.txt";
