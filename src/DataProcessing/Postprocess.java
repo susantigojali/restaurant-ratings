@@ -92,7 +92,9 @@ public class Postprocess {
                     while (!found && j < output[0].size()) {
                         if (TAG_SENTIMENT_POSITIVE.contains(output[0].get(j).toString())) {
                             if (!negOpinion.isEmpty()) {
-                                if (isOrientationChange(input, output, indexOpinion)) {
+                                String negation = getOrientationChange(input, output, indexOpinion);
+                                if (negation != null) {
+                                    negOpinion = negation + " " + negOpinion;
                                     aspectSentiment.add(new AspectSentiment(aspect, negOpinion, POSITIVE));
                                 } else {
                                     aspectSentiment.add(new AspectSentiment(aspect, negOpinion, NEGATIVE));
@@ -108,7 +110,9 @@ public class Postprocess {
                             }
                         } else if (TAG_SENTIMENT_NEGATIVE.contains(output[0].get(j).toString())) {
                             if (!posOpinion.isEmpty()) {
-                                if (isOrientationChange(input, output, indexOpinion)) {
+                                String negation = getOrientationChange(input, output, indexOpinion);
+                                if (negation != null) {
+                                    posOpinion = negation + " " + posOpinion;
                                     aspectSentiment.add(new AspectSentiment(aspect, posOpinion, NEGATIVE));
                                 } else {
                                     aspectSentiment.add(new AspectSentiment(aspect, posOpinion, POSITIVE));
@@ -125,7 +129,9 @@ public class Postprocess {
                         } else { //other or aspect
                             if (!posOpinion.isEmpty()) {
                                 assert negOpinion.isEmpty(); //harus ga ada neg opinion
-                                if (isOrientationChange(input, output, indexOpinion)) {
+                                String negation = getOrientationChange(input, output, indexOpinion);
+                                if (negation != null) {
+                                    posOpinion = negation + " " + posOpinion;
                                     aspectSentiment.add(new AspectSentiment(aspect, posOpinion, NEGATIVE));
                                 } else {
                                     aspectSentiment.add(new AspectSentiment(aspect, posOpinion, POSITIVE));
@@ -133,7 +139,9 @@ public class Postprocess {
                                 found = true;
                             } else if (!negOpinion.isEmpty()) {
                                 assert posOpinion.isEmpty(); //harus ga ada pos opinion
-                                if (isOrientationChange(input, output, indexOpinion)) {
+                                String negation = getOrientationChange(input, output, indexOpinion);
+                                if (negation != null) {
+                                    negOpinion = negation + " " + negOpinion;
                                     aspectSentiment.add(new AspectSentiment(aspect, negOpinion, POSITIVE));
                                 } else {
                                     aspectSentiment.add(new AspectSentiment(aspect, negOpinion, NEGATIVE));
@@ -148,14 +156,18 @@ public class Postprocess {
                     if (!found) {
                         if (!posOpinion.isEmpty()) {
                             assert negOpinion.isEmpty(); //harus ga ada neg opinion
-                            if (isOrientationChange(input, output, indexOpinion)) {
+                            String negation = getOrientationChange(input, output, indexOpinion);
+                            if (negation != null) {
+                                posOpinion = negation + " " + posOpinion;
                                 aspectSentiment.add(new AspectSentiment(aspect, posOpinion, NEGATIVE));
                             } else {
                                 aspectSentiment.add(new AspectSentiment(aspect, posOpinion, POSITIVE));
                             }
                         } else if (!negOpinion.isEmpty()) {
                             assert posOpinion.isEmpty(); //harus ga ada pos opinion
-                            if (isOrientationChange(input, output, indexOpinion)) {
+                            String negation = getOrientationChange(input, output, indexOpinion);
+                            if (negation != null) {
+                                negOpinion = negation + " " + negOpinion;
                                 aspectSentiment.add(new AspectSentiment(aspect, negOpinion, POSITIVE));
                             } else {
                                 aspectSentiment.add(new AspectSentiment(aspect, negOpinion, NEGATIVE));
@@ -203,8 +215,10 @@ public class Postprocess {
                     //find aspect before this opinion
                     String aspectOpinion = findAspect(input, output, i);
                     
-                    System.out.println("change: "+isOrientationChange(input, output, indexOpinion));
-                    if (isOrientationChange(input, output, indexOpinion)) {
+                    System.out.println("change: "+getOrientationChange(input, output, indexOpinion));
+                    String negation = getOrientationChange(input, output, indexOpinion);
+                    if (negation != null) {
+                        posOpinion = negation + " " + posOpinion;
                         aspectSentiment.add(new AspectSentiment(aspectOpinion, posOpinion, NEGATIVE));
                     } else {
                         aspectSentiment.add(new AspectSentiment(aspectOpinion, posOpinion, POSITIVE));
@@ -216,8 +230,10 @@ public class Postprocess {
         if (!posOpinion.isEmpty()) {
             String aspectOpinion = findAspect(input, output, output[0].size());
             
-            System.out.println("change: "+isOrientationChange(input, output, indexOpinion));
-            if (isOrientationChange(input, output, indexOpinion)) {
+            System.out.println("change: "+getOrientationChange(input, output, indexOpinion));
+            String negation = getOrientationChange(input, output, indexOpinion);
+            if (negation != null) {
+                posOpinion = negation + " " + posOpinion;
                 aspectSentiment.add(new AspectSentiment(aspectOpinion, posOpinion, NEGATIVE));
             } else {
                 aspectSentiment.add(new AspectSentiment(aspectOpinion, posOpinion, POSITIVE));
@@ -252,8 +268,10 @@ public class Postprocess {
                     //find aspect before this opinion
                     String aspectOpinion = findAspect(input, output, i);
                     
-                    System.out.println("change: "+isOrientationChange(input, output, indexOpinion));
-                    if (isOrientationChange(input, output, indexOpinion)) {
+                    System.out.println("change: "+getOrientationChange(input, output, indexOpinion));
+                    String negation = getOrientationChange(input, output, indexOpinion);
+                    if (negation != null) {
+                        negOpinion = negation + " " + negOpinion;
                         aspectSentiment.add(new AspectSentiment(aspectOpinion, negOpinion, POSITIVE));
                     } else {
                         aspectSentiment.add(new AspectSentiment(aspectOpinion, negOpinion, NEGATIVE));
@@ -264,8 +282,10 @@ public class Postprocess {
         }
         if (!negOpinion.isEmpty()) {
             String aspectOpinion = findAspect(input, output, output[0].size());
-                    System.out.println("change: "+isOrientationChange(input, output, indexOpinion));
-            if (isOrientationChange(input, output, indexOpinion)) {
+            System.out.println("change: "+getOrientationChange(input, output, indexOpinion));
+            String negation = getOrientationChange(input, output, indexOpinion);
+            if (negation != null) {
+                negOpinion = negation + " " + negOpinion;
                 aspectSentiment.add(new AspectSentiment(aspectOpinion, negOpinion, POSITIVE));
             } else {
                 aspectSentiment.add(new AspectSentiment(aspectOpinion, negOpinion, NEGATIVE));
@@ -401,12 +421,13 @@ public class Postprocess {
      * @param index index of the first opinion
      * @return true if there is a negative word before the index of opinion
      */
-    public static boolean isOrientationChange(ArrayList<Feature> input, Sequence[] output, int index) {
+    public static String getOrientationChange(ArrayList<Feature> input, Sequence[] output, int index) {
         ArrayList<String> negDict = Dictionary.getNegationWordsDict();
         ArrayList<String> ccDict = Dictionary.getCoordinatingConjuctionsDict();
         
         boolean found = false;
         boolean change = false;
+        String negation = null;
         
         for (int i = 1; i < SEARCH_NEGATION_AREA && (index - i) >=0 && !found; i++) {
             if (ccDict.contains(input.get(index-i).getWord())) {
@@ -416,9 +437,11 @@ public class Postprocess {
             } else if (negDict.contains(input.get(index-i).getWord())) {
                 found = true;
                 change = true;
+                negation = input.get(index-i).getWord();
             }
         }
-        return change;
+      
+        return negation;
     }
 }
 
