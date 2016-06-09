@@ -1,9 +1,13 @@
 package DataProcessing;
 
+import Learning.MyCRFSimpleTagger;
 import Model.AspectSentiment;
 import Model.Feature;
+import Model.Reader;
 import Model.SequenceTagging;
 import cc.mallet.types.Sequence;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,6 +26,12 @@ public class Postprocess {
     private static final ArrayList<String> TAG_ASPECT = new ArrayList<>(Arrays.asList("ASPECT-B", "ASPECT-I"));
     private static final ArrayList<String> TAG_SENTIMENT_POSITIVE = new ArrayList<>(Arrays.asList("OP_POS-B", "OP_POS-I"));
     private static final ArrayList<String> TAG_SENTIMENT_NEGATIVE = new ArrayList<>(Arrays.asList("OP_NEG-B", "OP_NEG-I"));
+    
+    private static final ArrayList<String> ASPECT = new ArrayList<>(Arrays.asList("aspect"));
+    private static final ArrayList<String> SENTIMENT = new ArrayList<>(Arrays.asList("op_pos", "op_neg"));
+    private static final ArrayList<String> POS_SENTIMENT = new ArrayList<>(Arrays.asList("op_pos"));
+    private static final ArrayList<String> NEG_SENTIMENT = new ArrayList<>(Arrays.asList("op_neg"));
+    private static final ArrayList<String> CONJUCTION = new ArrayList<>(Arrays.asList("dan", "tapi", "," , "hanya"));
 
     /**
      * find <aspect, sentiment> from the data
@@ -49,19 +59,306 @@ public class Postprocess {
         for (int i = 0; i < negOpinions.size(); i++) {
             System.out.println(i +" "+ negOpinions.get(i));
         }
+        System.out.println();
         
-        //find sentiment for each aspect
-        HashSet<AspectSentiment> aspectSentiment = getSentimentFromAspect(input, output);
+       /// Aspect Sentiment from rule
+        HashSet<AspectSentiment> aspectSentiments = getAS(input, output);
+        return new ArrayList<>(aspectSentiments);
+//        System.exit(-1);
         
-        //find aspect for each sentiment
-        HashSet<AspectSentiment> aspectPosSentiment = getAspectFromPosSentiment(input, output);
-        aspectSentiment.addAll(aspectPosSentiment);
         
-        HashSet<AspectSentiment> aspectNegSentiment = getAspectFromNegSentiment(input, output);
-        aspectSentiment.addAll(aspectNegSentiment);
-        
-        return new ArrayList<>(aspectSentiment);
+        // Aspect Sentiment [sentiment after aspect]
+        // jika ga ada aspek sama sekali
+//        if (aspects.isEmpty()) { //step 1
+//            return new ArrayList<>();
+//        }
+//        
+//        //jika cuma ada 1 aspek dalam 1 kalimat
+//        ArrayList<AspectSentiment> as = new ArrayList<>();
+//                
+//        if (aspects.size() == 1) { //step 2
+//            //find all aspect
+//            String aspect = aspects.get(0);
+//            for (String opPos : posOpinions) {
+//                //find index opinion
+//                String[] temp = opPos.split(" ");
+//                String opTemp;
+//                if (temp.length != 1) {
+//                    opTemp = temp[0];
+//                } else {
+//                    opTemp = opPos;
+//                }
+//                
+//                int indexOpinion = 0;
+//                boolean found = false;
+//                for (int i = 0; i < input.size() &&!found; i++) {
+//                    if (input.get(i).getWord().compareToIgnoreCase(opTemp) == 0) {
+//                        indexOpinion = i;
+//                        found = true;
+//                    }
+//                }
+//                String negation = getOrientationChange(input, output, indexOpinion);
+//                if (negation != null) {
+//                    opPos = negation + " " + opPos;
+//                    as.add(new AspectSentiment(aspect, opPos, NEGATIVE));
+//                } else {
+//                    as.add(new AspectSentiment(aspect, opPos, POSITIVE));
+//                }
+//            }
+//            
+//            for (String negPos : negOpinions) {
+//                //find index opinion
+//                String[] temp = negPos.split(" ");
+//                String opTemp;
+//                if (temp.length != 1) {
+//                    opTemp = temp[0];
+//                } else {
+//                    opTemp = negPos;
+//                }
+//                
+//                int indexOpinion = 0;
+//                boolean found = false;
+//                for (int i = 0; i < input.size() &&!found; i++) {
+//                    if (input.get(i).getWord().compareToIgnoreCase(opTemp) == 0) {
+//                        indexOpinion = i;
+//                        found = true;
+//                    }
+//                }
+//                String negation = getOrientationChange(input, output, indexOpinion);
+//                if (negation != null) {
+//                    negPos = negation + " " + negPos;
+//                    as.add(new AspectSentiment(aspect, negPos, POSITIVE));
+//                } else {
+//                    as.add(new AspectSentiment(aspect, negPos, NEGATIVE));
+//                }
+//            }
+//            return as;
+//        } 
+//        
+//        //jika ada banyak aspek dan sentimen //step 3
+//        
+//        //find sentiment for each aspect
+//        HashSet<AspectSentiment> aspectSentiment = getSentimentFromAspect(input, output);
+//        
+//        //find aspect for each sentiment
+//        HashSet<AspectSentiment> aspectPosSentiment = getAspectFromPosSentiment(input, output);
+//        aspectSentiment.addAll(aspectPosSentiment);
+//        
+//        HashSet<AspectSentiment> aspectNegSentiment = getAspectFromNegSentiment(input, output);
+//        aspectSentiment.addAll(aspectNegSentiment);
+//        
+//        return new ArrayList<>(aspectSentiment);
     }
+    
+    /**
+     * find ASPECT from SENTIMENT
+     * @param input sequence of input (word, postag)
+     * @param output sequence of output (label)
+     * @return list of aspect sentiment
+     */
+    private static HashSet<AspectSentiment> getAS(ArrayList<Feature> input, Sequence[] output) {
+        ArrayList<String> words = new ArrayList<>();
+        ArrayList<String> tags = new ArrayList<>(); //aspect, op_pos, op_neg, conjuction, comma
+        String token;
+        
+        int i = 0;
+        while (i < output[0].size()){
+            if (TAG_ASPECT.contains(output[0].get(i).toString())) {
+                token = input.get(i).getWord();
+                i++;
+                while (TAG_ASPECT.contains(output[0].get(i).toString())) {
+                    token = token + " " + input.get(i).getWord();
+                    i++;
+                }
+                words.add(token);
+                tags.add("aspect");
+                i--;
+            }
+            if (TAG_SENTIMENT_POSITIVE.contains(output[0].get(i).toString())) {
+                token = input.get(i).getWord();
+                String negation = getOrientationChange(input, output, i);
+                if (negation != null) {
+                    token = negation + " " + token;
+                    tags.add("op_neg");
+                } else {
+                    tags.add("op_pos");
+                }
+                i++;
+                while (TAG_SENTIMENT_POSITIVE.contains(output[0].get(i).toString())) {
+                    token = token + " " + input.get(i).getWord();
+                    i++;
+                }
+                words.add(token);
+                i--;
+            }
+            if (TAG_SENTIMENT_NEGATIVE.contains(output[0].get(i).toString())) {
+                token = input.get(i).getWord();
+                String negation = getOrientationChange(input, output, i);
+                if (negation != null) {
+                    token = negation + " " + token;
+                    tags.add("op_pos");
+                } else {
+                    tags.add("op_neg");
+                }
+                i++;
+                while (TAG_SENTIMENT_NEGATIVE.contains(output[0].get(i).toString())) {
+                    token = token + " " + input.get(i).getWord();
+                    i++;
+                }
+                words.add(token);
+                i--;
+            }
+            if (CONJUCTION.contains(input.get(i).getWord())) {
+                token = input.get(i).getWord();
+                i++;
+                while (CONJUCTION.contains(output[0].get(i).toString())) {
+                    token = token + " " + input.get(i).getWord();
+                    i++;
+                }
+                words.add(token);
+                tags.add("conjuction");
+                i--;
+            }
+            i++;
+        }
+                
+        System.out.println("+++++++++++");
+        for (int j = 0; j < words.size(); j++) {
+            System.out.println(words.get(j) +" "+ tags.get(j));
+        }
+        System.out.println("+++++++++++");
+        
+        HashSet<AspectSentiment> aspectSentiments = new HashSet<>();
+      
+        ArrayList<String> aspects = new ArrayList<>();
+        ArrayList<String> posOpinions = new ArrayList<>();
+        ArrayList<String> negOpinions = new ArrayList<>();
+        
+        int j = 0;
+        while(j < tags.size()) {
+            if (!aspects.isEmpty() && (!posOpinions.isEmpty() || !negOpinions.isEmpty())) { //udah ada aspek dan sentimen sebelumnya
+                //save aspek dan sentimen
+                for (String aspect : aspects) {
+                    for (String posOpinion : posOpinions) {
+                        aspectSentiments.add(new AspectSentiment(aspect, posOpinion, 1));
+                    }
+                    for (String negOpinion : negOpinions) {
+                        aspectSentiments.add(new AspectSentiment(aspect, negOpinion, -1));
+                    }
+                }
+                aspects = new ArrayList<>();
+                posOpinions = new ArrayList<>();
+                negOpinions = new ArrayList<>();
+//                System.out.println("save !!");
+            }
+                    
+            if (ASPECT.contains(tags.get(j))) {
+                //simpen aspek yg srkg
+//                System.out.println("get aspek... = " + words.get(j));
+                aspects = new ArrayList<>();
+                aspects.add(words.get(j));
+
+                //find another aspect
+                int k = j+1;
+                boolean found =true;
+                while(k < tags.size()-1 && found) {
+                    if (CONJUCTION.contains(words.get(k)) && ASPECT.contains(tags.get(k+1))) {
+                        //System.out.println("get aspek~... = " + words.get(k+1));
+                        aspects.add(words.get(k+1));
+                        k+=2;
+                    } else {
+                        found = false;
+                    }
+                }
+                j=k-1;
+            } else if (SENTIMENT.contains(tags.get(j))) {
+//                System.out.println("get sentimen "+words.get(j));
+                //buang aspek yg ada, simpen aspek yg srkg
+                posOpinions = new ArrayList<>();
+                negOpinions = new ArrayList<>();
+                if (POS_SENTIMENT.contains(tags.get(j))) {
+//                    System.out.println("get pos... = " + words.get(j));
+                    posOpinions.add(words.get(j));
+                } else if (NEG_SENTIMENT.contains(tags.get(j))) {
+//                    System.out.println("get neg... = " + words.get(j));
+                    negOpinions.add(words.get(j));
+                } else {
+                    System.out.println("ERROR!! "+tags.get(j));
+                    System.exit(-1);
+                }
+
+                //find another sentimen
+                int k = j+1;
+                boolean found =true;
+                while(k < tags.size()-1 && found) {
+                    if (CONJUCTION.contains(words.get(k)) && SENTIMENT.contains(tags.get(k+1))) {
+                        if (POS_SENTIMENT.contains(tags.get(k+1))) {
+//                            System.out.println("get pos~... = " + words.get(k+1));
+                            posOpinions.add(words.get(k+1));
+                        } else if(NEG_SENTIMENT.contains(tags.get(k+1))){
+//                            System.out.println("get neg~... = " + words.get(k+1));
+                            negOpinions.add(words.get(k+1));
+                        } else {
+                            System.out.println("ERROR!! "+tags.get(k+1));
+                            System.exit(-1);
+                        }
+                        k+=2;
+                    } else {
+                        found = false;
+                    }
+                }
+                j=k-1;
+            } else {
+                aspects = new ArrayList<>();
+                posOpinions = new ArrayList<>();
+                negOpinions = new ArrayList<>();
+            }
+            j++;
+        } 
+        
+        if (!aspects.isEmpty() && (!posOpinions.isEmpty() || !negOpinions.isEmpty())) { //di akhir
+            //save aspek dan sentimen
+            for (String aspect : aspects) {
+                for (String posOpinion : posOpinions) {
+                    aspectSentiments.add(new AspectSentiment(aspect, posOpinion, 1));
+                }
+                for (String negOpinion : negOpinions) {
+                    aspectSentiments.add(new AspectSentiment(aspect, negOpinion, -1));
+                }
+            }
+        } 
+        
+        System.out.println("````````````");
+        for (AspectSentiment s : aspectSentiments) {
+            System.out.println(s.getAspect() + " "+s.getSentiment());
+        }
+        System.out.println("````````````");
+        return aspectSentiments;
+        
+    }
+    
+    public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException {
+         //Preprocess CRF 
+        String rawCrfFilename = "datatest/CRF/rawdata";//.txt";
+        String dataCRF = "datatest/CRF/test";//.txt";
+        
+        Boolean includeInput = true;
+        int nBestOption = 1;
+        String CRF_MODEL = "datatest/Model/crf1 (205).model";
+                
+        Preprocess.preprocessDataforSequenceTagging(rawCrfFilename+".txt", dataCRF+".txt", false);
+
+        //Klasifikasi CRF
+        ArrayList<SequenceTagging> inputSequence = Reader.readSequenceInput(dataCRF+".txt");
+        ArrayList<SequenceTagging> outputs = MyCRFSimpleTagger.myClassify(dataCRF+".txt", CRF_MODEL, includeInput, nBestOption, inputSequence);
+
+        //Extract Aspect and Opinion
+        ArrayList<AspectSentiment> as = new ArrayList<>();
+        for (SequenceTagging output : outputs) {
+            Postprocess.findAspectSentiment(output);
+        }
+    }
+    
     
     /**
      * find sentiment from aspect
@@ -89,6 +386,7 @@ public class Postprocess {
                     //find opinion after this aspect
                     boolean found = false;
                     int j = i;
+                    boolean conj = false;
                     while (!found && j < output[0].size()) {
                         if (TAG_SENTIMENT_POSITIVE.contains(output[0].get(j).toString())) {
                             if (!negOpinion.isEmpty()) {
@@ -126,7 +424,7 @@ public class Postprocess {
                                     negOpinion = negOpinion + " " + input.get(j).getWord();
                                 }
                             }
-                        } else { //other or aspect
+                        } else { //other or aspect                          
                             if (!posOpinion.isEmpty()) {
                                 assert negOpinion.isEmpty(); //harus ga ada neg opinion
                                 String negation = getOrientationChange(input, output, indexOpinion);
