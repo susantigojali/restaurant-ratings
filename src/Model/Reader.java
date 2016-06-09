@@ -18,6 +18,7 @@ public class Reader {
     private static final int REVIEW_TEXT = 1;
 
     private static final String SPACE = " ";
+    private static final String TAB = "\\t";
 
     /**
      * Parsing review from the file
@@ -114,4 +115,40 @@ public class Reader {
         return sequenceTaggings;
     }
 
+    /**
+     * Read list of list of aspect sentiment form file
+     * @param fileName file name
+     * @return list of list of aspect and sentiment 
+     * @throws FileNotFoundException Exception if file can not be found
+     */
+    public static ArrayList<ArrayList<AspectSentiment>> readActualAspectSentiment(String fileName) throws FileNotFoundException {
+        ArrayList<ArrayList<AspectSentiment>> actualAspectSentiments = new ArrayList<>();
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+        
+        try {
+            String line;
+            ArrayList<AspectSentiment> as = new ArrayList();
+
+            while ((line = fileReader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    String[] token = line.split(TAB);
+                    assert token.length == 2;
+                    as.add(new AspectSentiment(token[0], token[1], 0));
+                } else {
+                    if (!as.isEmpty()) {
+                        actualAspectSentiments.add(as);
+                        as =  new ArrayList();
+                    }
+                }
+            }
+            if (!as.isEmpty()) {
+                actualAspectSentiments.add(as);
+            }
+            
+        } catch (IOException ex) {
+            System.out.println("IO Exception: readActualAspectSentiment");
+        }
+                
+        return actualAspectSentiments;
+    }
 }
