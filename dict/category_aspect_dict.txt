@@ -1,6 +1,8 @@
 #food
 food
 drink
+portion
+menu
 
 #price
 price
@@ -11,6 +13,16 @@ ambience
 atmosphere
 scenery
 view
+decoration
+toilet
+bathroom
+sofa
+chair
+table
+pillow
+floor
+design
+weather
 
 #service
 waiter

@@ -108,6 +108,7 @@ alot
 alpa
 teralpa
 altruistis
+am
 aman
 amatir-amatiran
 ambekparamarta
@@ -1038,7 +1039,6 @@ emotif
 empiris
 empuk
 enak
-enak-enak
 enap
 encel
 encer
@@ -4344,6 +4344,7 @@ takut-takutan
 ketakut
 takzim
 tamak
+taman
 tamam
 tamatulkalam
 tambun
