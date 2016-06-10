@@ -58,7 +58,7 @@ public class AspectAggregation {
 
             String aspect = as.getAspect();
             String category = getCategory(aspect);
-            System.out.println("category " + as.getAspect() + " = " + category);
+//            System.out.println("category " + as.getAspect() + " = " + category);
             if (aspectAggregations.containsKey(category)) {
                 ArrayList<AspectSentiment> newAS = new ArrayList<>(aspectAggregations.get(category));
                 newAS.add(as);
@@ -86,46 +86,79 @@ public class AspectAggregation {
         }
 
         String category = null;
-        String[] aspectList = aspects.split(" ");
         double max = Double.NEGATIVE_INFINITY;
-        
         boolean found = false;
-        for (String aspect : aspectList) {
-            if (aspect.endsWith("nya")) {
-                aspect = aspect.substring(0, aspect.length() - 3);
-            }
-
-            ArrayList<String> trans = Translator.getTranslation(aspect);
-
+        
+        System.out.println(aspects+"============");
+        String aspectTemp = aspects;
+        if (aspects.endsWith("nya")) {
+            aspectTemp = aspects.substring(0, aspects.length() - 3);
+        }
+        
+        ArrayList<String> translates = Translator.getTranslation(aspectTemp);
+        if (translates != null) { //translate all words
             for (String categoryName : aspectCategoryDicts.keySet()) {
                 ArrayList<String> value = aspectCategoryDicts.get(categoryName);
 
                 for (int i = 0; i < value.size() && !found; i++) {
                     String cat = value.get(i);
-                    if (trans == null) {
-                        if (cat.compareTo(aspect) == 0) {
+                    
+                    for (int j = 0; j < translates.size() && !found; j++) {
+                        if (cat.compareTo(translates.get(j)) == 0) {
                             found = true;
                             category = categoryName;
+//                                System.out.println("found full" +translates.get(j) +" "+categoryName);
                         } else {
-                            double jcn = Wordnet.jcn(aspect, cat);
+                            double jcn = Wordnet.jcn(translates.get(j), cat);
                             if (jcn > max) {
                                 max = jcn;
-                                System.out.println("max no trans " + aspect + ": " + max + " " + cat);
+//                                    System.out.println("max full" + translates.get(j) + ": " + max + " " + cat);
                                 category = categoryName;
                             }
                         }
-                    } else {
-                        for (int j = 0; j < trans.size() && !found; j++) {
-                            if (cat.compareTo(trans.get(j)) == 0) {
+                    }
+                }
+            }
+        } else {
+            String[] aspectList = aspects.split(" ");
+           
+            for (String aspect : aspectList) {
+                if (aspect.endsWith("nya")) {
+                    aspect = aspect.substring(0, aspect.length() - 3);
+                }
+
+                ArrayList<String> trans = Translator.getTranslation(aspect);
+
+                for (String categoryName : aspectCategoryDicts.keySet()) {
+                    ArrayList<String> value = aspectCategoryDicts.get(categoryName);
+
+                    for (int i = 0; i < value.size() && !found; i++) {
+                        String cat = value.get(i);
+                        if (trans == null) {
+                            if (cat.compareTo(aspect) == 0) {
                                 found = true;
                                 category = categoryName;
-                                System.out.println("found " +trans.get(j) +" "+categoryName);
                             } else {
-                                double jcn = Wordnet.jcn(trans.get(j), cat);
+                                double jcn = Wordnet.jcn(aspect, cat);
                                 if (jcn > max) {
                                     max = jcn;
-                                    System.out.println("max " + trans.get(j) + ": " + max + " " + cat);
+//                                    System.out.println("max no trans " + aspect + ": " + max + " " + cat);
                                     category = categoryName;
+                                }
+                            }
+                        } else { //translate found
+                            for (int j = 0; j < trans.size() && !found; j++) {
+                                if (cat.compareTo(trans.get(j)) == 0) {
+                                    found = true;
+                                    category = categoryName;
+//                                    System.out.println("found " +trans.get(j) +" "+categoryName);
+                                } else {
+                                    double jcn = Wordnet.jcn(trans.get(j), cat);
+                                    if (jcn > max) {
+                                        max = jcn;
+//                                        System.out.println("max " + trans.get(j) + ": " + max + " " + cat);
+                                        category = categoryName;
+                                    }
                                 }
                             }
                         }
@@ -133,7 +166,6 @@ public class AspectAggregation {
                 }
             }
         }
-        
         if (max == 0.0) {
             category = OTHER_CATEGORY;
         }
@@ -144,8 +176,8 @@ public class AspectAggregation {
     public static void main(String args[]) {
         try {
             ArrayList<AspectSentiment> aspectSentiments = new ArrayList<>();
-            aspectSentiments.add(new AspectSentiment("pizza cheese", "enak", 1));
-            aspectSentiments.add(new AspectSentiment("hargaas", "murah", 1));
+            aspectSentiments.add(new AspectSentiment("pizzanya cheesenya", "enak", 1));
+            aspectSentiments.add(new AspectSentiment("adu dombanya", "murah", 1));
             aspectSentiments.add(new AspectSentiment("dekorasi interior", "lezat", 1));
             LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation = aggregation(aspectSentiments);
 
