@@ -1,0 +1,490 @@
+rasa	baik
+tempat	nyaman
+
+keramahan penyambutan	menurun
+pelayan	cukup ramah
+menu	tidak seistimewa
+kualitas makanan	tidak seistimewa
+harga makanan	tinggi
+
+restoran	sangat nyaman
+pelayanan	baik
+makanan	sangat cepat
+rasa makanan	enak
+makanan penutupnya	enak
+lasagna	benar-benar puas
+cheese cake straberry	benar-benar puas
+harganya	tidak terlalu mahal
+
+suasana restoran	sangat baik
+suasana	cukup romantis
+pelayanan	cepat
+pelayan	cukup tangkas
+rasa makanan	biasa
+
+suasana	terbaik
+makanannya	biasa
+pelayanannya	biasa
+minumannya	enak
+sarung busa lesehannya	kurang nyaman
+
+suasana	cukup sepi
+makanannya	cukup mahal
+rasa makanan	biasa
+play listnya	cukup oke
+suara live music	terlalu keras
+
+tempatnya	nyaman
+tempatnya	asri
+makanan	enak
+suasana	romantis
+
+tempatnya	enak
+suasana	asri
+parkiran	penuh
+
+live musicnya	kurang
+nasi gorengya	enak
+sate ayam	enak
+steak braga permai	enak
+chicken snitzel	enak
+
+rasanya	luar biasa
+
+suasana	asyik banget
+
+rasa makanan	biasa
+kue-kue-nya	beragam pilihan
+kue-kue-nya	cukup menarik
+
+tempatnya	nyaman
+pelayannya	ramah
+pelayannya	sigap
+
+menu	lengkap
+menu	sangat enak
+nuansa restoran	homy
+nuansa restoran	sangat nyaman
+
+makanannya	enak
+tempatnya	asyik
+
+pemandangannya	sangat bagus
+
+tempat	dingin banget
+lantai	dingin
+tempat	menyenangkan
+
+minumannya	unik-unik
+masakan	enak
+harga	sesuai
+
+b&b	menyenangkan
+b&b	unik
+makanan	enak
+kasur	empuk
+
+desain interiornya	unik
+menu makanan	lumayan banyak
+harga	agak mahal
+suguhan	sangat enak
+kondisi cafenya	bersih
+pelayannya	ramah
+tempat	asyik
+
+makanan	enak
+minumannya	agak mahal
+tempat	nyaman
+
+porsinya	besar
+harga	lumayan mahal
+minumannya	enak enak
+
+makanan penutupnya	enak
+menu-menu sarapan	enak
+kue-kue	enak
+
+suasananya	enak
+penampilannya	bagus
+rasanya	enak
+makanan penutupnya	enak
+harganya	costly
+
+desain cafe	unik
+desain cafe	hangat
+desain cafe	sangat authentic
+desain cafe	chic
+
+tempatnya	bagus
+tempatnya	nyaman
+udara	dingin
+makanannya	lumayan
+
+rasa masakanya	enak
+rasa masakanya	bervariasi
+tempat	sangat sejuk
+tempat	nyaman
+
+makanan	biasa
+guramenya	sedikit overburn
+pemandangannya	bagus
+
+tempatnya	natural
+suhu	sejuk
+
+pemandangan	cukup indah
+pelayannya	ramah
+makanan	cukup standar
+makanan	tidak istimewa
+
+tempat	romantis
+suhu	dingin
+suasana	romantis
+
+tempat	bagus
+makanan	enak
+tempat	bagus
+suasana	adem
+
+rasa makanan	enak
+rasa makanan	tidak terlalu spesial
+harga	lumayan mahal
+lingkungannya	spesial
+
+parkirannya	selalu penuh
+suasana	sangat menyenangkan
+
+makanan	variatif
+steak	enak sekali
+sosisnya	enak sekali
+pizzanya	tidak eneg
+tempatnya	sangat nyaman
+
+steak	enak sekali
+
+steaknya	enak
+steaknya	tidak terlalu mahal
+makanan	beragam
+minumannya	beragam
+
+antrian	panjang
+harganya	terjangkau
+porsinya	besar
+rasanya	enak
+
+tempatnya	unik
+suasana	ethic
+harga	terjangkau
+porsi	besar
+steaknya	enak
+steaknya	lembut
+
+harga	pantas
+steak	enak
+
+tempat	nyaman
+tempat	romantis
+makanan	enak
+harga	tidak terlalu mahal
+
+akses	tidak terlalu susah
+suasana	menyenangkan
+makanan	cukup variatif
+porsi	kecil
+iga bakar daging	over cook
+iga bakar daging	terlalu empuk
+
+maja house	cukup tersohor
+pilihan makanan	bervariasi
+harga	cukup murah
+
+udaranya	sejuk
+tempat	nyaman
+
+restoran	sangat dikenal
+rasa minuman	terlalu manis
+rasa minuman	kurang original
+sofa bed	nyaman
+angin	sejuk
+
+udaranya	sejuk
+pemandangan	bagus
+lokasinya	sedikit tinggi
+desain restoran	unik
+pemandangan	indah
+desain interior restoran	khas
+udara	segar
+suasana	segar
+pemandangan alam	indah
+desain	unik
+
+tempat	nyaman
+pemandangan	bagus
+harga	terjangkau
+makanan	enak
+minuman cocktail	kurang enak
+
+makanan	enak
+porsi	lumayan besar
+kue	enak
+
+lokasinya	cukup di dalam
+tempat	selalu ramai
+rasa	cukup enak
+
+konsepnya	lucuk
+makanan	enak
+makanan	segar
+minumannya	enak-enak
+pelayannya	agak susah memanggi
+tempatnya	terlalu luas
+
+tempatnya	agak terpencil
+tempatnya	tidak seluas
+tempat	kecil
+pelayan	ramah
+pelayan	sedikit
+steaknya	tidak enak
+steaknya	hambar
+grill salmon	enak
+lasagnanya	enak
+tempat parkir	sangat penuh
+
+decornya	homey
+steaknya	tidak setimpal
+steaknya	sangat sangat keras
+steaknya	hambar
+rasanya	lebih enak
+
+suasananya	enak
+suasananya	adem
+suasananya	tentram
+makanan eropa	enak-enak
+
+letaknya	agak terpencil
+letaknya	gampang dicari
+makanannya	enak-enak
+makanan penutup	enak-enak
+
+tempat	nyaman
+
+tempat	strategis
+dekorasi	bagus
+udang bakar	enak
+ayam goreng 	enak
+
+pilihan menu	lengkap
+pilihan menu	bervariasi
+suasana restoran	apik
+pelayanan	prima
+
+suasana	nyaman
+variasi menu makanan	beragam
+kualitas rasa	baik
+penyajian makanan	menarik
+tempat	nyaman
+variasi makanan	nyaman
+
+rasanya	meraja
+bumbunya	meresap
+suasananya	nyaman
+harganya	lebih terjangkau
+
+makanannya	enak enak
+
+makanannya	enak
+paket makanan	sangat variatif
+ruangannya	luas
+ruangannya	lapang
+
+variasi menu	oke banget
+kepiting	oke
+udang	oke
+cumi	oke
+ikan bakar	oke
+jus strawberry	enak
+jus strawberry	kental
+hasil masakannya	enak
+sayuran	kriuk-kriuk
+sayuran	tidak lembek
+konsep arsitektur	menarik
+
+makanannya	enak
+restorannya	nyaman
+harganya	terjangkau
+lokasi tempat restoran	sangat strategis
+
+tempatnya	nyaman
+tempat duduknya	kurang
+pelayanannya	cukup baik
+
+sushi	enak
+salmon cheese roll	enak
+
+tempatnya	enak
+suasananya	nyaman
+menu makanan	bervariasi
+semuanya	enak
+ice cream blueberrynya	enak banget
+
+sushi	segar
+sasihiminya	segar
+harga	tidak terlalu mahal
+sushinya	banyak jenisnya
+
+harga	relatif mahal
+
+pelayanan	oke
+ocha dingin / panas	free
+
+tempat	romantis
+pemandangan	indah
+makanan eropa	enak
+
+suasana	sangat enak
+udara	dingin
+restoran	sangat terkenal
+
+restoran	cukup indah
+pelayanan	kurang maksimal
+rasa	standar
+harga	cukup tinggi
+
+tempatnya	terkesan suram
+tepatnya	kurang menarik
+pelayan	tidak acuh
+
+suasana restoran	nyaman modeern
+rasanya	oke
+harga	premium
+udara	agak dingin
+
+aksesnya	agak membingungkan
+tempatnya	sangat bagus
+suasana malam	romantis
+pemandangan malam kota	menakjubkan
+interior restoran	agak tua
+interior restoran	kurang modern
+makanan	cukup memuaskan
+pilihan wine/ minuman	cukup memuaskan
+
+suasana	santai
+suasana	menyenangkan
+lokasi	cukup jauh
+makanan	nikmat
+minuman	nikmat
+cuaca	sejuk
+
+lokasinya	oke banget
+makanannya	biasa
+makanan	tidak spesial
+
+tempat	romantis
+makanan	enak
+
+tempat	sangat mudah dicapai
+makanan	enak
+tempat	sangat bersih
+tempat	rapi
+pelayanan	sangat ramah
+pesanan	cepat
+pesanan	tidak lambat
+
+rasanya	biasa
+tempat parkir	susah
+
+pelayanan	sedikit lama
+harganya	cukup mahal
+pemandangan	bagus banget
+
+lokasi	gampang akses
+makanannya	enak
+suasananya	nyaman
+
+harga makanan	setimpal
+harga minuman	setimpal
+
+restoran	cukup enak
+pemandangan	bagus
+makanan	enak
+makanan	enak
+
+makanannya	enak-enak
+pemandangan restoran	sangat bagus
+restoran	sangat ramai
+
+harganya	mahal
+tempatnya	suka
+
+tempatnya	luas banget
+harganya	cukup terjangkau
+
+tempatnya	bagus
+
+pemandanga kota bandung	indah
+tempatnya	nyaman
+menu makanannya	cukup bervariasi
+
+makanan	oke
+
+tempatnya	cukup ramai
+suasanan ruangan	agak remang-remang
+tempat	sangat direkomendasikan
+
+tempatnya	cukup enak
+tempatnya	terlalu gelap
+tempatnya	kurang privasi
+mejanya	cukup dekat
+luas area	tidak terlalu besar
+makanannya	cukup enak
+harganya	lumayan mahal
+kopinya	enak
+
+bahan bacaan	cukup bagus
+pilihan kopi	banyak
+rasanya	enak
+rasanya	cukup enak
+carrot kuenya	sangat enak
+
+makanannya	enak sekali
+pilihan makan paginya	tidak terlalu banyak
+pilihan menu paginya	cukup variatif
+
+rasa makanan	oke
+petugas	ramah
+tempat	cukup unik
+tempat	nayaman
+rasa kopinya	standar
+harga	sesuai
+harga	terjangkau
+
+interiornya	unik
+suasananya	nyaman sekali
+menunya	tidak terlalu banyak
+menunya	menarik
+menunya	enak
+porsi	cukup besar
+pelayannya	ramah
+pelayannya	helpful
+harga	tidak terlalu mahal
+
+menu	sangat enak
+porsinya	besar
+bumbunya	sangat pas
+rasa milk cappucino	sangat enak
+desain cafe industrial	sangat menarik
+
+porsinya	besar
+porsinya	penuh
+
+bangunan	klasik
+tata ruangnya	klasik
+menu	sedikit kecewa
+sop buntut	lumayan enak
+pannacota-nya	lumayan enak
+
+taman	luas banget
+parkirnya	tidak bingung
+restoran	enak
+tempatnya	cukup jauh
+rasanya	setimpal
