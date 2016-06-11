@@ -12,14 +12,20 @@ public class Postag {
     /**
      * Header for all postag
      */
-    public static final String HEADER = "open_parenthesis;close_parenthesis;slash;"
-            + "semicolon;colon;quotation;sentence_terminator;comma;dash;ellipsis;"
-            + "adjective;adverb;common_noun;proper_noun;genitive_noun;intransitive_verb;"
-            + "transitive_verb;preprosition;modal;coor_conjuction;subor_conjunction;"
-            + "determiner;interjection;ordinal_numerals;collective_numerals;"
-            + "primary_numerals;irregular_numerals;personal_pronouns;wh_pronouns;"
-            + "number_pronouns;locative_pronouns;negation;symbols;particles;foreign_word;"
-            + "pronouns;bilangan";
+//    public static final String HEADER = "sentence_terminator;"
+//            + "adverb;modal;personal_pronouns;bilangan";
+//            /*"open_parenthesis;close_parenthesis;slash;"
+//            + "semicolon;colon;quotation;sentence_terminator;comma;dash;ellipsis;"
+//            + "adjective;adverb;common_noun;proper_noun;genitive_noun;intransitive_verb;"
+//            + "transitive_verb;preprosition;modal;coor_conjuction;subor_conjunction;"
+//            + "determiner;interjection;ordinal_numerals;collective_numerals;"
+//            + "primary_numerals;irregular_numerals;personal_pronouns;wh_pronouns;"
+//            + "number_pronouns;locative_pronouns;negation;symbols;particles;foreign_word;"
+//            + "pronouns;bilangan";
+//            */
+    
+    public static final String HEADER = "sentence_terminator_binarized;"
+            + "adverb_binarized;modal_binarized;personal_pronouns_binarized;bilangan_binarized";
 
     public static final String OPEN_PARENTHESIS = "(";
     public static final String CLOSE_PARENTHESIS = ")";
@@ -83,186 +89,186 @@ public class Postag {
     public static String createAllPostag(ArrayList<String[]> sentence, String delimiter) {
 
         String feature = "";
-        if (containOpenParenthesis(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containCloseParenthesis(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containsSlash(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containSemicolon(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containColon(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containQuotation(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
+//        if (containOpenParenthesis(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containCloseParenthesis(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containsSlash(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containSemicolon(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containColon(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containQuotation(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
         if (containSentenceTerminator(sentence)) {
             feature = feature + "1" + delimiter;
         } else {
             feature = feature + "0" + delimiter;
         }
-        if (containComma(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containDash(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containEllipsis(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containAdjective(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
+//        if (containComma(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containDash(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containEllipsis(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containAdjective(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
         if (containAdverb(sentence)) {
             feature = feature + "1" + delimiter;
         } else {
             feature = feature + "0" + delimiter;
         }
-        if (containCommonNoun(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containProperNoun(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containGenitiveNoun(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containIntransitiveVerb(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containTransitiveVerb(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containPreposition(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
+//        if (containCommonNoun(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containProperNoun(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containGenitiveNoun(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {    
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containIntransitiveVerb(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containTransitiveVerb(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containPreposition(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
         if (containModal(sentence)) {
             feature = feature + "1" + delimiter;
         } else {
             feature = feature + "0" + delimiter;
         }
-        if (containCoorConjuction(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containSuborConjuction(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containDeterminer(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containInterjection(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containOrdinalNumberals(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containCollectiveNumerals(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containPrimaryNumerals(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containIrregularNumerals(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
+//        if (containCoorConjuction(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containSuborConjuction(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containDeterminer(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containInterjection(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containOrdinalNumberals(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containCollectiveNumerals(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containPrimaryNumerals(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containIrregularNumerals(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
         if (containPersonalPronouns(sentence)) {
             feature = feature + "1" + delimiter;
         } else {
             feature = feature + "0" + delimiter;
         }
-        if (containWHPronouns(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containNumberPronouns(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containLocativePronouns(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containNegation(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containSymbols(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containParticles(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containForeignWords(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
-        if (containPronouns(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
+//        if (containWHPronouns(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containNumberPronouns(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containLocativePronouns(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containNegation(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containSymbols(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containParticles(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containForeignWords(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
+//        if (containPronouns(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
         if (containNumerals(sentence)) {
             feature = feature + "1" ;
         } else {

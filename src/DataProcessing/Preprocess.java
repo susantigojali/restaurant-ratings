@@ -26,7 +26,8 @@ public class Preprocess {
     private static final String DELIMITER = ";";
     private static final String SPACE = " ";
     private static final String NEW_LINE_SEPARATOR = "\n";
-    private static final String FILE_HEADER = "no;sentence;formalized_sentence;class;sentence_position";
+//    private static final String FILE_HEADER = "no;sentence;formalized_sentence;class;sentence_position";
+    private static final String FILE_HEADER = "no;sentence;formalized_sentence;class;sentence_position_binarized";
 
     /**
      * Split sentences to list of sentence
@@ -136,7 +137,7 @@ public class Preprocess {
     
     //convert ... to .
     private static String cleanText(String sentence) {
-        return sentence.replaceAll("(\\.)+ ?", "\\. ");
+        return sentence.replaceAll("([^\\d])(\\.)+ ?([^\\d])", "$1\\. $3");
     }
 
     /**
@@ -157,8 +158,10 @@ public class Preprocess {
         FileWriter fw = new FileWriter(file);
         try (BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write("sep=" + DELIMITER + NEW_LINE_SEPARATOR);
-            String fileHeader = FILE_HEADER + DELIMITER + "emoticon" + DELIMITER + "adj_dict" + DELIMITER
-                    + "neg_dict" + DELIMITER + Postag.HEADER;
+            String fileHeader = FILE_HEADER + DELIMITER + "adj_dict" + DELIMITER + Postag.HEADER;
+            //for full feature
+//            String fileHeader = FILE_HEADER + DELIMITER + "emoticon" + DELIMITER + "adj_dict" + DELIMITER
+//                    + "neg_dict" + DELIMITER + Postag.HEADER;
             bw.write(fileHeader + NEW_LINE_SEPARATOR);
 
             int n = 1;
@@ -181,12 +184,12 @@ public class Preprocess {
                         bw.write(0 + DELIMITER);
                     }
 
-                    ArrayList<String> emoticons = getEmoticons(reviewText.get(i).toLowerCase());
-                    if (!emoticons.isEmpty()) {
-                        bw.write(1 + DELIMITER);
-                    } else {
-                        bw.write(0 + DELIMITER);
-                    }
+//                    ArrayList<String> emoticons = getEmoticons(reviewText.get(i).toLowerCase());
+//                    if (!emoticons.isEmpty()) {
+//                        bw.write(1 + DELIMITER);
+//                    } else {
+//                        bw.write(0 + DELIMITER);
+//                    }
 
                     if (PostagDict.containAdjective(formalizedSentence)) {
                         bw.write(1 + DELIMITER);
@@ -194,11 +197,11 @@ public class Preprocess {
                         bw.write(0 + DELIMITER);
                     }
 
-                    if (PostagDict.containNegation(formalizedSentence)) {
-                        bw.write(1 + DELIMITER);
-                    } else {
-                        bw.write(0 + DELIMITER);
-                    }
+//                    if (PostagDict.containNegation(formalizedSentence)) {
+//                        bw.write(1 + DELIMITER);
+//                    } else {
+//                        bw.write(0 + DELIMITER);
+//                    }
 
                     ArrayList<String[]> postag = Postag.doPOSTag(formalizedSentence);
                     String feature = Postag.createAllPostag(postag, DELIMITER);
@@ -290,14 +293,14 @@ public class Preprocess {
         //Prepare data NBC for learning
 //        ArrayList<Review> reviews = new ArrayList<>();
 //
-//        String fileInput = "crawl-data/DataLearningNBC3 (120).csv";
+//        String fileInput = "crawl-data/DataLearningNBC2 (120).csv";
 //        try {
 //            reviews = Reader.readReviewFromFile(fileInput);
 //        } catch (FileNotFoundException ex) {
 //            System.out.println("File not found");
 //        }
 //
-//        String filename = "dataset/NBC/DataLearningNBC3 (120) NBCAnotasi new.csv";
+//        String filename = "dataset/NBC/DataLearningNBC2 (120) NBCAnotasi 3 juni.csv";
 //        try {
 //            Preprocess.preprocessDataforNBC(reviews, filename);
 //        } catch (IOException ex) {
@@ -307,7 +310,7 @@ public class Preprocess {
 
 //        Prepare data for CRF
         String inputFile = "dataset/CRF/rawdata1 (205).txt";
-        String outputFile = "dataset/CRF/CRFAnotasi1 test(dibuang aja nanti, ga penting, buat liat doang).csv";
+        String outputFile = "dataset/CRF/CRFAnotasi1 new.csv"; //test(dibuang aja nanti, ga penting, buat liat doang).csv";
         int type = 0;
         try {
             Preprocess.preprocessDataforSequenceTagging(inputFile, outputFile, true);
