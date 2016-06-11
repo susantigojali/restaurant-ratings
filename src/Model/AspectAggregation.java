@@ -89,7 +89,6 @@ public class AspectAggregation {
         double max = Double.NEGATIVE_INFINITY;
         boolean found = false;
         
-        System.out.println(aspects+"============");
         String aspectTemp = aspects;
         if (aspects.endsWith("nya")) {
             aspectTemp = aspects.substring(0, aspects.length() - 3);
