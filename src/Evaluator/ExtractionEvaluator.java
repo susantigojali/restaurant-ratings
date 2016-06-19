@@ -13,22 +13,23 @@ public class ExtractionEvaluator {
     
    
     public static void evaluate(ArrayList<AspectSentiment> prediction, ArrayList<AspectSentiment> actual) {
-        int correct = 0 ;
-        for(AspectSentiment as :actual) {
-            for (AspectSentiment pred : prediction) {
-                if (same(pred, as)) {
-                    correct++;
-                }
-            }
-        }
         if (prediction.isEmpty()) {
             precision = 0;
             recall = 0;
         } else {
+            int correct = 0 ;
+            for(AspectSentiment as :actual) {
+                boolean found = false;
+                for (AspectSentiment pred : prediction) {
+                    if (same(pred, as) && !found) {
+                        found = true;
+                        correct++;
+                    }
+                }
+            }
             precision = (double) correct / prediction.size();
             recall = (double) correct / actual.size();
         }
-        
     }
     
     private static boolean same(AspectSentiment pred, AspectSentiment act) {
