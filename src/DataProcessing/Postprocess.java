@@ -24,14 +24,17 @@ public class Postprocess {
     private static final int NETRAL = 0;
     
     private static final ArrayList<String> TAG_ASPECT = new ArrayList<>(Arrays.asList("ASPECT-B", "ASPECT-I"));
+    private static final ArrayList<String> TAG_SENTIMENT = new ArrayList<>(Arrays.asList("OP_POS-B", "OP_POS-I", "OP_NEG-B", "OP_NEG-I" ));
     private static final ArrayList<String> TAG_SENTIMENT_POSITIVE = new ArrayList<>(Arrays.asList("OP_POS-B", "OP_POS-I"));
+    private static final ArrayList<String> TAG_SENTIMENT_POSITIVE_INSIDE = new ArrayList<>(Arrays.asList( "OP_POS-I"));
     private static final ArrayList<String> TAG_SENTIMENT_NEGATIVE = new ArrayList<>(Arrays.asList("OP_NEG-B", "OP_NEG-I"));
+    private static final ArrayList<String> TAG_SENTIMENT_NEGATIVE_INSIDE = new ArrayList<>(Arrays.asList("OP_NEG-I"));
     
     private static final ArrayList<String> ASPECT = new ArrayList<>(Arrays.asList("aspect"));
     private static final ArrayList<String> SENTIMENT = new ArrayList<>(Arrays.asList("op_pos", "op_neg"));
     private static final ArrayList<String> POS_SENTIMENT = new ArrayList<>(Arrays.asList("op_pos"));
     private static final ArrayList<String> NEG_SENTIMENT = new ArrayList<>(Arrays.asList("op_neg"));
-    private static final ArrayList<String> CONJUCTION = new ArrayList<>(Arrays.asList("dan", "tapi", "," , "hanya"));
+    private static final ArrayList<String> CONJUCTION = new ArrayList<>(Arrays.asList("dan", "tapi", "," , "hanya", "namun"));
 
     /**
      * find <aspect, sentiment> from the data
@@ -166,9 +169,14 @@ public class Postprocess {
             if (TAG_ASPECT.contains(output[0].get(i).toString())) {
                 token = input.get(i).getWord();
                 i++;
-                while (TAG_ASPECT.contains(output[0].get(i).toString())) {
-                    token = token + " " + input.get(i).getWord();
-                    i++;
+                boolean found = true;
+                while ( i< output[0].size() && found) {
+                    if (TAG_ASPECT.contains(output[0].get(i).toString())) {
+                        token = token + " " + input.get(i).getWord();
+                        i++;
+                    } else {
+                        found=false;
+                    }
                 }
                 words.add(token);
                 tags.add("aspect");
@@ -184,9 +192,14 @@ public class Postprocess {
                     tags.add("op_pos");
                 }
                 i++;
-                while (TAG_SENTIMENT_POSITIVE.contains(output[0].get(i).toString())) {
-                    token = token + " " + input.get(i).getWord();
-                    i++;
+                boolean found = true;
+                while (i < output[0].size() && found) {
+                    if (TAG_SENTIMENT_POSITIVE_INSIDE.contains(output[0].get(i).toString())) {
+                        token = token + " " + input.get(i).getWord();
+                        i++;
+                    } else {
+                        found=false;
+                    }
                 }
                 words.add(token);
                 i--;
@@ -201,32 +214,36 @@ public class Postprocess {
                     tags.add("op_neg");
                 }
                 i++;
-                while (TAG_SENTIMENT_NEGATIVE.contains(output[0].get(i).toString())) {
-                    token = token + " " + input.get(i).getWord();
-                    i++;
+                boolean found = true;
+                while (i< output[0].size() &&  found ) {
+                    if (TAG_SENTIMENT_NEGATIVE_INSIDE.contains(output[0].get(i).toString())) {
+                        token = token + " " + input.get(i).getWord();
+                        i++;
+                    } else {
+                        found=false;
+                    }
                 }
                 words.add(token);
                 i--;
             }
             if (CONJUCTION.contains(input.get(i).getWord())) {
                 token = input.get(i).getWord();
-                i++;
-                while (CONJUCTION.contains(output[0].get(i).toString())) {
-                    token = token + " " + input.get(i).getWord();
-                    i++;
+                if (i+1 <output[0].size()) {
+                    if (token.compareTo(",") == 0 && input.get(i+1).getWord().compareTo("dan") == 0 ) {
+                        i++;
+                    }
                 }
                 words.add(token);
                 tags.add("conjuction");
-                i--;
             }
             i++;
         }
                 
-        System.out.println("+++++++++++");
+        System.out.println("++++++++++++");
         for (int j = 0; j < words.size(); j++) {
-            System.out.println(words.get(j) +" "+ tags.get(j));
+            System.out.println(words.get(j) +"      "+ tags.get(j));
         }
-        System.out.println("+++++++++++");
+        System.out.println("++++++++++++");
         
         HashSet<AspectSentiment> aspectSentiments = new HashSet<>();
       
@@ -330,7 +347,7 @@ public class Postprocess {
         
         System.out.println("````````````");
         for (AspectSentiment s : aspectSentiments) {
-            System.out.println(s.getAspect() + " "+s.getSentiment());
+            System.out.println(s.getAspect() + " >> "+ s.getSentiment());
         }
         System.out.println("````````````");
         return aspectSentiments;
@@ -339,12 +356,12 @@ public class Postprocess {
     
     public static void main(String args[]) throws IOException, FileNotFoundException, ClassNotFoundException {
          //Preprocess CRF 
-        String rawCrfFilename = "datatest/CRF/rawdata";//.txt";
+        String rawCrfFilename = "datatest/CRF/rawtest";//.txt";
         String dataCRF = "datatest/CRF/test";//.txt";
         
         Boolean includeInput = true;
         int nBestOption = 1;
-        String CRF_MODEL = "datatest/Model/crf1 (205).model";
+        String CRF_MODEL = "datatest/Model/crf1 (298).model";
                 
         Preprocess.preprocessDataforSequenceTagging(rawCrfFilename+".txt", dataCRF+".txt", false);
 
@@ -731,6 +748,10 @@ public class Postprocess {
             if (ccDict.contains(input.get(index-i).getWord())) {
                 found = true;
             } else if (TAG_ASPECT.contains(output[0].get(index-i).toString())) {
+                found = true;
+            } else if (TAG_SENTIMENT.contains(output[0].get(index-i).toString())) {
+                found = true;
+            } else if (output[0].get(index-i).toString().compareTo(",") == 0) {
                 found = true;
             } else if (negDict.contains(input.get(index-i).getWord())) {
                 found = true;
