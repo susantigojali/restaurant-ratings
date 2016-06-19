@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -77,7 +78,8 @@ public class Reader {
     }
 
     /**
-     * Read sequence from file 
+     * Read sequence from file
+     *
      * @param fileName sequence tagging file
      * @return List of Sequence Tagging
      * @throws FileNotFoundException Exception if file can not be found
@@ -85,7 +87,7 @@ public class Reader {
     public static ArrayList<SequenceTagging> readSequenceInput(String fileName) throws FileNotFoundException {
         ArrayList<SequenceTagging> sequenceTaggings = new ArrayList<>();
         BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
-        
+
         try {
             String line;
             ArrayList<Feature> sequenceInput = new ArrayList();
@@ -97,34 +99,34 @@ public class Reader {
                     sequenceInput.add(new Feature(token[0], token[1]));
                 } else {
                     if (!sequenceInput.isEmpty()) {
-                        SequenceTagging st = new  SequenceTagging(sequenceInput, new Sequence[0]);
+                        SequenceTagging st = new SequenceTagging(sequenceInput, new Sequence[0]);
                         sequenceTaggings.add(st);
-                        sequenceInput =  new ArrayList();
+                        sequenceInput = new ArrayList();
                     }
                 }
             }
             if (!sequenceInput.isEmpty()) {
                 sequenceTaggings.add(new SequenceTagging(sequenceInput, new Sequence[0]));
-                sequenceInput =  new ArrayList();
+                sequenceInput = new ArrayList();
             }
-            
+
         } catch (IOException ex) {
             System.out.println("IO Exception: readSequenceTagging");
         }
-        
+
         return sequenceTaggings;
     }
 
     /**
      * Read list of list of aspect sentiment form file
      * @param fileName file name
-     * @return list of list of aspect and sentiment 
+     * @return list of list of aspect and sentiment
      * @throws FileNotFoundException Exception if file can not be found
      */
     public static ArrayList<ArrayList<AspectSentiment>> readActualAspectSentiment(String fileName) throws FileNotFoundException {
         ArrayList<ArrayList<AspectSentiment>> actualAspectSentiments = new ArrayList<>();
         BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
-        
+
         try {
             String line;
             ArrayList<AspectSentiment> as = new ArrayList();
@@ -144,11 +146,59 @@ public class Reader {
             if (!as.isEmpty()) {
                 actualAspectSentiments.add(as);
             }
-            
+
         } catch (IOException ex) {
             System.out.println("IO Exception: readActualAspectSentiment");
         }
-                
+
         return actualAspectSentiments;
+    }
+
+    /**
+     * Read list of aspect categories from file
+     * @param fileName file name
+     * @return list of aspect categories
+     * @throws FileNotFoundException Exception if file can not be found
+     */
+    public static ArrayList<LinkedHashMap<String, ArrayList<AspectSentiment>>> readAspectAggregation(String fileName) throws FileNotFoundException {
+        ArrayList<LinkedHashMap<String, ArrayList<AspectSentiment>>> actualAspectAggregations = new ArrayList<>();
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+
+        try {
+            String line;
+            ArrayList<AspectSentiment> as = new ArrayList();
+            LinkedHashMap<String, ArrayList<AspectSentiment>> aspectAggregations = new LinkedHashMap<>();
+
+            while ((line = fileReader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    String[] token = line.split(TAB);
+                    assert token.length == 3;
+                    String category = token[2];
+                    if (aspectAggregations.containsKey(category)) {
+                        ArrayList<AspectSentiment> newAS = new ArrayList<>(aspectAggregations.get(category));
+                        newAS.add(new AspectSentiment(token[0], token[1], 0));
+                        aspectAggregations.put(category, newAS);
+                    } else {
+                        ArrayList<AspectSentiment> newAS = new ArrayList<>();
+                        newAS.add(new AspectSentiment(token[0], token[1], 0));
+                        aspectAggregations.put(category, newAS);
+                    }
+                } else {
+                    if (!aspectAggregations.isEmpty()) {
+                        actualAspectAggregations.add(aspectAggregations);
+                        aspectAggregations = new LinkedHashMap<>();                       
+                    }
+                }
+            }
+            if (!aspectAggregations.isEmpty()) {
+                actualAspectAggregations.add(aspectAggregations);
+                aspectAggregations = new LinkedHashMap<>();                       
+            }
+
+        } catch (IOException ex) {
+            System.out.println("IO Exception: readActualAspectAggregation");
+        }
+        
+        return actualAspectAggregations;
     }
 }
