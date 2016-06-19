@@ -2,6 +2,7 @@ package RestaurantRatings;
 
 import DataProcessing.Postprocess;
 import DataProcessing.Preprocess;
+import Evaluator.AspectAggregationEvaluator;
 import Evaluator.ExtractionEvaluator;
 import Learning.MyCRFSimpleTagger;
 import Learning.WekaHelper;
@@ -25,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSink;
@@ -35,8 +37,9 @@ import weka.core.converters.ConverterUtils.DataSink;
  */
 public class Main {
 
-    private static final String NBC_MODEL = "datatest/Model/nbc B - 7 Fitur (1081).model";
-    private static final String CRF_MODEL = "datatest/Model/crf2 (298).model";
+    private static final String NBC_MODEL = "datatest/Model/nbc AA 6F (1688 modif).model";
+    private static final String J48_MODEL = "datatest/Model/J48 B - 7 Fitur (1696).model";
+    private static final String CRF_MODEL = "datatest/Model/crfFULL1 (606).model";
 
     private static final int SUBJECTIVE_INDEX = 0;
     private static final int FORMALIZED_SENTENCE_INDEX = 0;
@@ -67,7 +70,7 @@ public class Main {
         String dataNbc = "datatest/NBC/NBCData";
         try {
             ArrayList<Review> reviews = Reader.readReviewFromFile(rawFilename);
-            classifyNBC(reviews, dataNbc, true);
+            classifySentenceSubjectivity(reviews, dataNbc, true);
         } catch (FileNotFoundException ex) {
             System.out.println("File not found: prepare data learning NBC");
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,9 +98,9 @@ public class Main {
             saveClassifyCRF(dataCRFAnotasi, outputs);
             
         } catch (FileNotFoundException ex) {
-            System.out.println("file not found");
+            System.out.println("file not found: data , model CRF");
         } catch (ClassNotFoundException ex) {
-            System.out.println("class not found");
+            System.out.println("class not found: model");
         }
     }
     
@@ -156,14 +159,21 @@ public class Main {
      *
      */
     public static void startApp() {
-        double f1 = 0.0 ;
-        double prec = 0.0 ;
-        double rec = 0.0 ;
+        double fExtraction = 0.0 ;
+        double precExtraction = 0.0 ;
+        double recExtraction = 0.0 ;
+        double fAgg = 0.0 ;
+        double precAgg = 0.0 ;
+        double recAgg = 0.0 ;
        
         try {
             //for extraction evaluation
             String dataExtractionAS = "datatest/CRF/CRFExtraction.txt";
             ArrayList<ArrayList<AspectSentiment>> actualAspectSentiments = Reader.readActualAspectSentiment(dataExtractionAS);
+            
+            //for aggregation evaluation
+            String dataAspectAggregation = "datatest/CRF/AspectAggregation.txt";
+            ArrayList<LinkedHashMap<String, ArrayList<AspectSentiment>>> actualAspectAggregation = Reader.readAspectAggregation(dataAspectAggregation);
             
             //Start Application
             
@@ -176,7 +186,7 @@ public class Main {
                 reviewsTemp.add(review);
                 
                 //Step 1 Subjectivity Classification
-                classifyNBC(reviewsTemp, dataNbcCsv+INDEX, false);
+                classifySentenceSubjectivity(reviewsTemp, dataNbcCsv+INDEX, false);
                 
                 //Step 2
                 String rawCrfFilename = "datatest/CRF/rawdata";//.txt";
@@ -219,9 +229,9 @@ public class Main {
                     //Evaluation extraction aspect and sentiment
                     ExtractionEvaluator.evaluate(as, actualAspectSentiments.get(INDEX));
                     ExtractionEvaluator.printEvaluation();
-                    f1+=ExtractionEvaluator.getF1();
-                    prec+=ExtractionEvaluator.getPrecision();
-                    rec+=ExtractionEvaluator.getRecall();
+                    fExtraction+=ExtractionEvaluator.getF1();
+                    precExtraction+=ExtractionEvaluator.getPrecision();
+                    recExtraction+=ExtractionEvaluator.getRecall();
                   
                     //Agregasi Aspek
                     System.out.println("\n\nAgregasi Aspek-------------------------");
@@ -237,6 +247,14 @@ public class Main {
                         }
                     }
                     
+                    //Evaluation aspect aggregation
+                    AspectAggregationEvaluator.evaluate(aggregation, actualAspectAggregation.get(INDEX));
+                    AspectAggregationEvaluator.printEvaluation();
+                    fAgg+=AspectAggregationEvaluator.getF1();
+                    precAgg+=AspectAggregationEvaluator.getPrecision();
+                    recAgg+=AspectAggregationEvaluator.getRecall();
+                    
+                    
                 } catch (IOException ex) {
                     System.out.println("IO Exeption");
                 } catch (ClassNotFoundException ex) {
@@ -246,16 +264,22 @@ public class Main {
                 INDEX++;
             }
             
-            System.out.println("prec: " + prec +" "+prec/reviews.size());
-            System.out.println("rec: " + rec +" "+ rec/reviews.size());
-            System.out.println("f1: " + f1 +" "+ f1/reviews.size());
+            System.out.println("Extraction::");
+            System.out.println("prec:  "+precExtraction/reviews.size());
+            System.out.println("rec: " + recExtraction/reviews.size());
+            System.out.println("f1: " + fExtraction/reviews.size());
+            
+            System.out.println("Aggregation::");
+            System.out.println("prec:  "+precAgg/reviews.size());
+            System.out.println("rec: " + recAgg/reviews.size());
+            System.out.println("f1: " + fAgg/reviews.size());
             
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
     }
 
-    private static void classifyNBC(ArrayList<Review> reviews, String dataNbc, boolean isLearning) {
+    private static void classifySentenceSubjectivity(ArrayList<Review> reviews, String dataNbc, boolean isLearning) {
         //Step 1 Subjectivity Classification
         //String rawFilename = "datatest/NBC/RawDatatest.txt";
         try {
@@ -264,7 +288,7 @@ public class Main {
 
             //Preprocess
             String dataNbcCsv = dataNbc + ".csv";
-            String dataNbcArff = dataNbc + ".arff";
+            String dataNbcArff = dataNbc + "(delete this).arff";
             Preprocess.preprocessDataforNBC(reviews, dataNbcCsv);
             Csv2Arff.convert(dataNbcCsv, dataNbcArff);
 
@@ -274,6 +298,7 @@ public class Main {
 
             //load model
             NaiveBayes NB = (NaiveBayes) WekaHelper.loadModelFromFile(NBC_MODEL);
+            J48 J48 = (J48) WekaHelper.loadModelFromFile(J48_MODEL);
 //            System.out.println(NB.getHeader());
 
             //Classification
@@ -281,6 +306,7 @@ public class Main {
             
             for (int i = 0; i < unlabeledData.size(); i++) {
                 double label = NB.classifyInstance(unlabeledData.instance(i));
+//                double label = J48.classifyInstance(unlabeledData.instance(i));
                 unlabeledData.instance(i).setClassValue(label);
                 dataTest.instance(i).setClassValue(label);
             }
