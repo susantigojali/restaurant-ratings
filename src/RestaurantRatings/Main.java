@@ -39,7 +39,7 @@ public class Main {
 
     private static final String NBC_MODEL = "datatest/Model/nbc AA 6F (1688 modif).model";
     private static final String J48_MODEL = "datatest/Model/J48 B - 7 Fitur (1696).model";
-    private static final String CRF_MODEL = "datatest/Model/crfFULL1 (606).model";
+    private static final String CRF_MODEL = "datatest/Model/crfFULL1 (605).model";
 
     private static final int SUBJECTIVE_INDEX = 0;
     private static final int FORMALIZED_SENTENCE_INDEX = 0;
@@ -83,8 +83,8 @@ public class Main {
      * @throws java.io.IOException
      */
     public static void prepareDataLearningCRF() throws IOException {
-        String rawCrfFilename = "datatest/CRF/rawdata new.txt";
-        String dataCRF = "datatest/CRF/CRFAnotasi2 (file temporary because of app).csv";
+        String rawCrfFilename = "dataset/CRF/rawdata_FULL2 (992) .txt";
+        String dataCRF = "dataset/CRF/CRFAnotasif (file temporary because of app).csv";
         Preprocess.preprocessDataforSequenceTagging(rawCrfFilename, dataCRF, false);
         
         Boolean includeInput = true;
@@ -92,7 +92,7 @@ public class Main {
         ArrayList<SequenceTagging> inputSequence = Reader.readSequenceInput(dataCRF);
         
         try {
-            String dataCRFAnotasi = "datatest/CRF/CRFAnotasi2.csv";
+            String dataCRFAnotasi = "dataset/CRF/CRFAnotasif new.csv";
             ArrayList<SequenceTagging> outputs = MyCRFSimpleTagger.myClassify(dataCRF, CRF_MODEL, includeInput, nBestOption, inputSequence);
             
             saveClassifyCRF(dataCRFAnotasi, outputs);
@@ -120,7 +120,7 @@ public class Main {
             for (SequenceTagging output : outputs) {
                 for (int i = 0; i < output.getSequenceInput().size(); i++) {
                     bw.write(output.getSequenceInput().get(i).getWord() + ";" + output.getSequenceInput().get(i).getPostag() + ";");
-                    bw.write(output.getOutput()[0].get(i).toString() + NEW_LINE_SEPARATOR);
+                    bw.write(output.getOutput().get(i) + NEW_LINE_SEPARATOR);
                 }
                 bw.write(NEW_LINE_SEPARATOR);
             }
@@ -207,7 +207,7 @@ public class Main {
 //                        for (int j = 0; j < outputs.get(i).getSequenceInput().size(); j++) {
 //                             System.out.println(outputs.get(i).getSequenceInput().get(j).getWord() + " "+
 //                                    outputs.get(i).getSequenceInput().get(j).getPostag() + " "+
-//                                    outputs.get(i).getOutput()[0].get(j));
+//                                    outputs.get(i).getOutput().get(j));
 //                        }
 //                       
 //                    }
@@ -218,13 +218,13 @@ public class Main {
                         as.addAll(Postprocess.findAspectSentiment(output)); 
                     }
 
-                    System.out.println("\n\nEkstrak pasangan aspek dan sentimen----------------------");
-                    System.out.println("____________________________");
-                    for (int j = 0; j < as.size(); j++) {
-                        System.out.println("index: " + j);
-                        as.get(j).print();
-                    }
-                    System.out.println("____________________________");
+//                    System.out.println("\n\nEkstrak pasangan aspek dan sentimen----------------------");
+//                    System.out.println("____________________________");
+//                    for (int j = 0; j < as.size(); j++) {
+//                        System.out.println("index: " + j);
+//                        as.get(j).print();
+//                    }
+//                    System.out.println("____________________________");
                     
                     //Evaluation extraction aspect and sentiment
                     ExtractionEvaluator.evaluate(as, actualAspectSentiments.get(INDEX));
@@ -234,16 +234,17 @@ public class Main {
                     recExtraction+=ExtractionEvaluator.getRecall();
                   
                     //Agregasi Aspek
-                    System.out.println("\n\nAgregasi Aspek-------------------------");
+//                    System.out.println("\n\nAgregasi Aspek-------------------------");
                     LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation = AspectAggregation.aggregation(as);
                     System.out.println("\n\nTotal Category :"+ aggregation.size());
 
                     for (String key : aggregation.keySet()) {
                         ArrayList<AspectSentiment> value = aggregation.get(key);
                         double rating = Rating.getRating(value);
-                        System.out.println(key + " ========= rating: " +rating);
+                        System.out.println(key + " ========= rating: " + rating);
                         for (int i = 0; i < value.size(); i++) {
-                            System.out.println("\t"+value.get(i).getAspect()+ " => " + value.get(i).getSentiment() + " " + value.get(i).getOrientation());
+                            System.out.print("\t");
+                            value.get(i).print();
                         }
                     }
                     
@@ -332,6 +333,8 @@ public class Main {
         }
     }
 
+    
+    
     private static void printLabel(Instances instances) {
         System.out.println("\nLabel==========");
         for (Instance inst : instances) {

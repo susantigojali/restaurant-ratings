@@ -138,8 +138,8 @@ public class MyCRFSimpleTagger {
     
     public static void main(String[] args) throws Exception {
        // Training CRF
-        String trainFilename = "dataset/CRF/CRFDataset1 baru(205).txt";
-        String modelFilename = "dataset/CRF/crf1 baru2 anotasi dan postag baru.model";
+        String trainFilename = "dataset/CRF/CRFDatasetFULL2 (992).txt";
+        String modelFilename = "dataset/CRF/crfFULL2 (992).model";
         int folds = 10;
         myTrain(trainFilename, modelFilename, folds);
 
@@ -250,9 +250,9 @@ public class MyCRFSimpleTagger {
      * @param nBestOption number of output
      * @param inputSequences sequence of input <word, postag> and output
      * @return list of sequence output 
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws FileNotFoundException test file, model file
+     * @throws IOException model file
+     * @throws ClassNotFoundException CRF
      */
     public static ArrayList<SequenceTagging> myClassify(String testFilename, String modelFilename, Boolean includeInput, int nBestOption, ArrayList<SequenceTagging> inputSequences) throws FileNotFoundException, IOException, ClassNotFoundException {
         Reader testFile = null;
@@ -276,7 +276,7 @@ public class MyCRFSimpleTagger {
                 new LineGroupIterator(testFile,
                         Pattern.compile("^\\s*$"), true));
 
-        logger.info("Number of predicates: " + p.getDataAlphabet().size());
+//        logger.info("Number of predicates: " + p.getDataAlphabet().size());
 
         ArrayList<SequenceTagging> outputClassify = new ArrayList<>();  
         assert (inputSequences.size() == testData.size()); //memastikan reader sequence input jalan dengan benar
@@ -294,7 +294,11 @@ public class MyCRFSimpleTagger {
                 }
             }
             if (!error) {
-                outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), outputs));
+                ArrayList<String> seqOutputs = new ArrayList<>();
+                for (int j = 0; j < outputs[0].size(); j++) {
+                    seqOutputs.add(outputs[0].get(j).toString());
+                }
+                outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), seqOutputs));
                 
                 for (int j = 0; j < input.size(); j++) {
                     StringBuffer buf = new StringBuffer();
@@ -310,7 +314,7 @@ public class MyCRFSimpleTagger {
                 }
 //                System.out.println();
             } else { // jika hasil output error, kasih sequence kosong
-                outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), new Sequence[1])); //ga tau bener apa ga, sementara
+                outputClassify.add(new SequenceTagging(inputSequences.get(i).getSequenceInput(), null));
             }
         }
 

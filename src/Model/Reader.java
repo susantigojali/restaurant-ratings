@@ -99,15 +99,14 @@ public class Reader {
                     sequenceInput.add(new Feature(token[0], token[1]));
                 } else {
                     if (!sequenceInput.isEmpty()) {
-                        SequenceTagging st = new SequenceTagging(sequenceInput, new Sequence[0]);
+                        SequenceTagging st = new SequenceTagging(sequenceInput, null);
                         sequenceTaggings.add(st);
                         sequenceInput = new ArrayList();
                     }
                 }
             }
             if (!sequenceInput.isEmpty()) {
-                sequenceTaggings.add(new SequenceTagging(sequenceInput, new Sequence[0]));
-                sequenceInput = new ArrayList();
+                sequenceTaggings.add(new SequenceTagging(sequenceInput, null));
             }
 
         } catch (IOException ex) {
@@ -191,8 +190,7 @@ public class Reader {
                 }
             }
             if (!aspectAggregations.isEmpty()) {
-                actualAspectAggregations.add(aspectAggregations);
-                aspectAggregations = new LinkedHashMap<>();                       
+                actualAspectAggregations.add(aspectAggregations);                 
             }
 
         } catch (IOException ex) {

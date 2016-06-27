@@ -1,6 +1,5 @@
 package Model;
 
-import cc.mallet.types.Sequence;
 import java.util.ArrayList;
 
 /**
@@ -9,25 +8,15 @@ import java.util.ArrayList;
  */
 public class SequenceTagging {
 
-//    private Sequence input;
-    private Sequence[] output;
     private ArrayList<Feature> sequenceInput;
+    private ArrayList<String> output;
 
-//    public SequenceTagging(Sequence input, Sequence[] output) {
-//        this.input = input;
-//        this.output = output;
-//    }
-
-    public SequenceTagging(ArrayList<Feature> sequenceInput, Sequence[] output) {
+    public SequenceTagging(ArrayList<Feature> sequenceInput, ArrayList<String> output) {
         this.sequenceInput = sequenceInput;
         this.output = output;
     }
 
-//    public Sequence getInput() {
-//        return input;
-//    }
-
-    public Sequence[] getOutput() {
+    public ArrayList<String> getOutput() {
         return output;
     }
 
@@ -35,11 +24,7 @@ public class SequenceTagging {
         return sequenceInput;
     }
 
-//    public void setInput(Sequence input) {
-//        this.input = input;
-//    }
-
-    public void setOutput(Sequence[] output) {
+    public void setOutput(ArrayList<String> output) {
         this.output = output;
     }
     
@@ -49,8 +34,8 @@ public class SequenceTagging {
             String postag =  sequenceInput.get(i).getPostag();
             
             System.out.print("feature: " + word + " " + postag + " ");
-            if (output.length != 0) {
-                String label = output[0].get(i).toString();
+            if (!output.isEmpty()) {
+                String label = output.get(i);
                 System.out.print(label);
             }
             System.out.println();
