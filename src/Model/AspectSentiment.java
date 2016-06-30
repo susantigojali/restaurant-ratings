@@ -18,9 +18,12 @@ public class AspectSentiment {
     }
     
     public void print() {
-        System.out.println("Aspect: "+ aspect );
-        System.out.println("Sentiment: " + sentiment );
-        System.out.println("Orientation: "+ orientation );
+        if (isPositive()) {
+            System.out.print("(+) ");
+        } else if (isNegative()) {
+            System.out.print("(-) ");
+        }
+        System.out.println( aspect + " => " + sentiment);
     }
 
     public String getAspect() {
