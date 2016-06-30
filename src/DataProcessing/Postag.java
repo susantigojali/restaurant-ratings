@@ -12,9 +12,7 @@ public class Postag {
     /**
      * Header for all postag
      */
-//    public static final String HEADER = "sentence_terminator;"
-//            + "adverb;modal;personal_pronouns;bilangan";
-//            /*"open_parenthesis;close_parenthesis;slash;"
+//    public static final String HEADER = "open_parenthesis;close_parenthesis;slash;"
 //            + "semicolon;colon;quotation;sentence_terminator;comma;dash;ellipsis;"
 //            + "adjective;adverb;common_noun;proper_noun;genitive_noun;intransitive_verb;"
 //            + "transitive_verb;preprosition;modal;coor_conjuction;subor_conjunction;"
@@ -22,10 +20,9 @@ public class Postag {
 //            + "primary_numerals;irregular_numerals;personal_pronouns;wh_pronouns;"
 //            + "number_pronouns;locative_pronouns;negation;symbols;particles;foreign_word;"
 //            + "pronouns;bilangan";
-//            */
     
-    public static final String HEADER = "sentence_terminator_binarized;"
-            + "adverb_binarized;modal_binarized;personal_pronouns_binarized;bilangan_binarized";
+    public static final String HEADER = //"sentence_terminator_binarized;+"
+             "adverb_binarized;modal_binarized;personal_pronouns_binarized;bilangan_binarized";
 
     public static final String OPEN_PARENTHESIS = "(";
     public static final String CLOSE_PARENTHESIS = ")";
@@ -119,11 +116,11 @@ public class Postag {
 //        } else {
 //            feature = feature + "0" + delimiter;
 //        }
-        if (containSentenceTerminator(sentence)) {
-            feature = feature + "1" + delimiter;
-        } else {
-            feature = feature + "0" + delimiter;
-        }
+//        if (containSentenceTerminator(sentence)) {
+//            feature = feature + "1" + delimiter;
+//        } else {
+//            feature = feature + "0" + delimiter;
+//        }
 //        if (containComma(sentence)) {
 //            feature = feature + "1" + delimiter;
 //        } else {

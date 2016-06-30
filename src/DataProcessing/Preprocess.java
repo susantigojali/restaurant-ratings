@@ -159,7 +159,7 @@ public class Preprocess {
         try (BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write("sep=" + DELIMITER + NEW_LINE_SEPARATOR);
             String fileHeader = FILE_HEADER + DELIMITER + "adj_dict" + DELIMITER + Postag.HEADER;
-            //for full feature
+//            for full feature
 //            String fileHeader = FILE_HEADER + DELIMITER + "emoticon" + DELIMITER + "adj_dict" + DELIMITER
 //                    + "neg_dict" + DELIMITER + Postag.HEADER;
             bw.write(fileHeader + NEW_LINE_SEPARATOR);
@@ -241,11 +241,11 @@ public class Preprocess {
                 for (String[] pos : postag) {
                     if (PostagDict.containAdjective(pos[0])) {
                         if (pos[1].compareTo(Postag.ADJECTIVE) != 0 ) {
-                            System.out.print(pos[0] + " "+ pos[1]+ " ");
+//                            System.out.print(pos[0] + " "+ pos[1]+ " ");
                             count(pos);
                             
                             pos[1] =  Postag.ADJECTIVE;
-                            System.out.println(pos[1]);
+//                            System.out.println(pos[1]);
                         }
                     }
                     
@@ -274,7 +274,7 @@ public class Preprocess {
         boolean found = false;
         for (String[] s : adj.keySet()) {
             //System.out.println(s[0]+" "+ postag[0] + " "+ s[1]+ " "+ postag[1]);
-            if (s[0].contentEquals(postag[0]) && s[1].contentEquals(postag[1]) ) {
+            if (s[0].contentEquals(postag[0]) ){//&& s[1].contentEquals(postag[1]) ) {
                 found = true;
                 adj.put(s, adj.get(s) + 1);
             } 
@@ -290,17 +290,17 @@ public class Preprocess {
     }
     
     public static void main(String[] args) {
-        //Prepare data NBC for learning
+//        Prepare data NBC for learning
 //        ArrayList<Review> reviews = new ArrayList<>();
 //
-//        String fileInput = "crawl-data/DataLearningNBC2 (120).csv";
+//        String fileInput = "crawl-data/DataLearningNBC4 (125).csv";
 //        try {
 //            reviews = Reader.readReviewFromFile(fileInput);
 //        } catch (FileNotFoundException ex) {
 //            System.out.println("File not found");
 //        }
 //
-//        String filename = "dataset/NBC/DataLearningNBC2 (120) NBCAnotasi 3 juni.csv";
+//        String filename = "dataset/NBC/DataLearningNBC4 (125) NBCAnotasi.csv";
 //        try {
 //            Preprocess.preprocessDataforNBC(reviews, filename);
 //        } catch (IOException ex) {
@@ -309,17 +309,17 @@ public class Preprocess {
 //        System.exit(-1);
 
 //        Prepare data for CRF
-        String inputFile = "dataset/CRF/rawdata1 (205).txt";
-        String outputFile = "dataset/CRF/CRFAnotasi1 new.csv"; //test(dibuang aja nanti, ga penting, buat liat doang).csv";
-        int type = 0;
-        try {
-            Preprocess.preprocessDataforSequenceTagging(inputFile, outputFile, true);
-        } catch (IOException ex) {
-            Logger.getLogger(Preprocess.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.exit(-1);
+//        String inputFile = "dataset/CRF/rawdata_FULL1 (606).txt";
+//        String outputFile = "dataset/CRF/CRFAnotasi_full.csv"; //test(dibuang aja nanti, ga penting, buat liat doang).csv";
+//        int type = 0;
+//        try {
+//            Preprocess.preprocessDataforSequenceTagging(inputFile, outputFile, true);
+//        } catch (IOException ex) {
+//            Logger.getLogger(Preprocess.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        System.exit(-1);
 
-        String sentence = "untuk minumannya yang greentea segar banget .";
+        String sentence = "rata-rata restoran di dago menang pemandangan nya tapi ini pizza dan makanannya enak-enak kl pas dapat pemandangan banget oke juga tetapi kalau di bawah paling live music aja kalau wiken pasti antri banget  . ";
 
         String newSentence = formalizeForeignWord(cleanText(sentence.toLowerCase()));
         String formalizedSentence = deleteStopword(formalizeSentence2(cleanTextForWeka(newSentence)));
@@ -329,8 +329,9 @@ public class Preprocess {
 //        for (String split : splits) {
 //            System.out.println(split);
 //        }
-//
+//     
         ArrayList<String[]> postag = Postag.doPOSTag(formalizedSentence);
+        System.out.println(postag.size());
         for (String[] pos : postag) {
             if (PostagDict.containAdjective(pos[0])) {
                 if (pos[1].compareTo(Postag.ADJECTIVE) != 0 ) {
