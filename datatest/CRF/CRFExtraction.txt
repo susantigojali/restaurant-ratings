@@ -1,3 +1,4 @@
+tempat	kesukaan
 rasa	baik
 tempat	nyaman
 
@@ -15,6 +16,7 @@ makanan penutupnya	enak
 lasagna	benar-benar puas
 cheese cake straberry	benar-benar puas
 harganya	tidak terlalu mahal
+harganya	sangat pantas
 
 suasana restoran	sangat baik
 suasana	cukup romantis
@@ -26,33 +28,38 @@ suasana	terbaik
 makanannya	biasa
 pelayanannya	biasa
 minumannya	enak
+tempat	ternyaman
 sarung busa lesehannya	kurang nyaman
 
 suasana	cukup sepi
 makanannya	cukup mahal
 rasa makanan	biasa
+air putih	bonus
 play listnya	cukup oke
 suara live music	terlalu keras
 
+restoran	suka
 tempatnya	nyaman
 tempatnya	asri
 makanan	enak
-suasana	romantis
+suasananya	romantis
 
 tempatnya	enak
 suasana	asri
 parkiran	penuh
-
 live musicnya	kurang
-nasi gorengya	enak
+
+nasi gorengnya	enak
 sate ayam	enak
 steak braga permai	enak
 chicken snitzel	enak
 
 rasanya	luar biasa
 
-suasana	asyik banget
+tempat makan	wajib dikunjungi
+suasananya	asyik banget
 
+nuansa	kolonial
 rasa makanan	biasa
 kue-kue-nya	beragam pilihan
 kue-kue-nya	cukup menarik
@@ -69,7 +76,7 @@ nuansa restoran	sangat nyaman
 makanannya	enak
 tempatnya	asyik
 
-pemandangannya	sangat bagus
+pemandangan	sangat bagus
 
 tempat	dingin banget
 lantai	dingin
@@ -82,6 +89,7 @@ harga	sesuai
 b&b	menyenangkan
 b&b	unik
 makanan	enak
+kasur	bersih
 kasur	empuk
 
 desain interiornya	unik
@@ -90,12 +98,15 @@ harga	agak mahal
 suguhan	sangat enak
 kondisi cafenya	bersih
 pelayannya	ramah
-tempat	asyik
+tempat hangout	asyik
 
 makanan	enak
+pasta	kesukaan
+coklat pudingnya	kesukaan
 minumannya	agak mahal
 tempat	nyaman
 
+menu sarapan paginya	juara
 porsinya	besar
 harga	lumayan mahal
 minumannya	enak enak
@@ -151,8 +162,13 @@ rasa makanan	tidak terlalu spesial
 harga	lumayan mahal
 lingkungannya	spesial
 
+restoran	kesukaan
 parkirannya	selalu penuh
 suasana	sangat menyenangkan
+tenderloin steak	rekomendasi
+t-rex bone / rib eye	rekomendasi
+roti goreng	kesukaan
+minuman	menyegarkan
 
 makanan	variatif
 steak	enak sekali
@@ -176,11 +192,15 @@ tempatnya	unik
 suasana	ethic
 harga	terjangkau
 porsi	besar
+monster steak	terkenal
+monster sosis	terkenal
+gorilla punch	terkenal
 steaknya	enak
 steaknya	lembut
 
 harga	pantas
 steak	enak
+menu raksasanya	terkenal
 
 tempat	nyaman
 tempat	romantis
@@ -190,9 +210,12 @@ harga	tidak terlalu mahal
 akses	tidak terlalu susah
 suasana	menyenangkan
 makanan	cukup variatif
+tease	oke
 porsi	kecil
 iga bakar daging	over cook
 iga bakar daging	terlalu empuk
+bapak	cukup cooperative
+bapak	cukup ramah
 
 maja house	cukup tersohor
 pilihan makanan	bervariasi
@@ -200,6 +223,7 @@ harga	cukup murah
 
 udaranya	sejuk
 tempat	nyaman
+tempat duduk	sulit
 
 restoran	sangat dikenal
 rasa minuman	terlalu manis
@@ -207,6 +231,7 @@ rasa minuman	kurang original
 sofa bed	nyaman
 angin	sejuk
 
+restoran	cocok
 udaranya	sejuk
 pemandangan	bagus
 lokasinya	sedikit tinggi
@@ -236,7 +261,7 @@ konsepnya	lucuk
 makanan	enak
 makanan	segar
 minumannya	enak-enak
-pelayannya	agak susah memanggi
+pelayannya	agak susah
 tempatnya	terlalu luas
 
 tempatnya	agak terpencil
@@ -248,9 +273,10 @@ steaknya	tidak enak
 steaknya	hambar
 grill salmon	enak
 lasagnanya	enak
+restoran	tidak merekomendasikan
 tempat parkir	sangat penuh
 
-decornya	homey
+dekorasinya	homey
 steaknya	tidak setimpal
 steaknya	sangat sangat keras
 steaknya	hambar
@@ -273,13 +299,14 @@ dekorasi	bagus
 udang bakar	enak
 ayam goreng 	enak
 
+restotan seafood	kesukaan
 pilihan menu	lengkap
 pilihan menu	bervariasi
 suasana restoran	apik
 pelayanan	prima
 
 suasana	nyaman
-variasi menu makanan	beragam
+variasi menu makanan indonesia	beragam
 kualitas rasa	baik
 penyajian makanan	menarik
 tempat	nyaman
@@ -290,6 +317,7 @@ bumbunya	meresap
 suasananya	nyaman
 harganya	lebih terjangkau
 
+tempat makan	cocok
 makanannya	enak enak
 
 makanannya	enak
@@ -307,6 +335,7 @@ jus strawberry	kental
 hasil masakannya	enak
 sayuran	kriuk-kriuk
 sayuran	tidak lembek
+restoran	oke
 konsep arsitektur	menarik
 
 makanannya	enak
@@ -314,10 +343,11 @@ restorannya	nyaman
 harganya	terjangkau
 lokasi tempat restoran	sangat strategis
 
-tempatnya	nyaman
+tempat	nyaman
 tempat duduknya	kurang
 pelayanannya	cukup baik
 
+sushi	gratis
 sushi	enak
 salmon cheese roll	enak
 
@@ -332,10 +362,13 @@ sasihiminya	segar
 harga	tidak terlalu mahal
 sushinya	banyak jenisnya
 
+salmon sashimi	kesukaan
 harga	relatif mahal
 
 pelayanan	oke
-ocha dingin / panas	free
+ocha dingin / panas	gratis
+salmon belly soup	kesukaan
+salmon skin	kesukaan
 
 tempat	romantis
 pemandangan	indah
@@ -351,10 +384,10 @@ rasa	standar
 harga	cukup tinggi
 
 tempatnya	terkesan suram
-tepatnya	kurang menarik
+tempatnya	kurang menarik
 pelayan	tidak acuh
 
-suasana restoran	nyaman modeern
+suasana restoran	nyaman modern
 rasanya	oke
 harga	premium
 udara	agak dingin
@@ -370,6 +403,7 @@ pilihan wine/ minuman	cukup memuaskan
 
 suasana	santai
 suasana	menyenangkan
+tempat	terbaik
 lokasi	cukup jauh
 makanan	nikmat
 minuman	nikmat
@@ -381,6 +415,7 @@ makanan	tidak spesial
 
 tempat	romantis
 makanan	enak
+makanan	menggugah selera
 
 tempat	sangat mudah dicapai
 makanan	enak
@@ -401,6 +436,7 @@ lokasi	gampang akses
 makanannya	enak
 suasananya	nyaman
 
+hang out	cocok
 harga makanan	setimpal
 harga minuman	setimpal
 
@@ -421,13 +457,14 @@ harganya	cukup terjangkau
 
 tempatnya	bagus
 
-pemandanga kota bandung	indah
+pemandangan kota bandung	indah
 tempatnya	nyaman
 menu makanannya	cukup bervariasi
 
 makanan	oke
 
 tempatnya	cukup ramai
+harga makanan	pantas
 suasanan ruangan	agak remang-remang
 tempat	sangat direkomendasikan
 
@@ -441,16 +478,17 @@ harganya	lumayan mahal
 kopinya	enak
 
 bahan bacaan	cukup bagus
-pilihan kopi	banyak
+pilihan kopi	cukup banyak
 rasanya	enak
 rasanya	cukup enak
 carrot kuenya	sangat enak
 
 makanannya	enak sekali
 pilihan makan paginya	tidak terlalu banyak
-pilihan menu paginya	cukup variatif
+pilihan makan paginya	cukup variatif
 
 rasa makanan	oke
+waktu tunggu	cepat
 petugas	ramah
 tempat	cukup unik
 tempat	nayaman
@@ -476,12 +514,13 @@ desain cafe industrial	sangat menarik
 
 porsinya	besar
 porsinya	penuh
+interior concept	suka
 
 bangunan	klasik
 tata ruangnya	klasik
 menu	sedikit kecewa
 sop buntut	lumayan enak
-pannacota-nya	lumayan enak
+pannacota	lumayan enak
 
 taman	luas banget
 parkirnya	tidak bingung
