@@ -21,7 +21,8 @@ public class AspectAggregation {
 
     private static final LinkedHashMap<String, ArrayList<String>> aspectCategoryDicts = new LinkedHashMap<>();
 
-    private static void intDict() throws FileNotFoundException {
+    // initialize dictionary
+    private static void initDict() throws FileNotFoundException {
         BufferedReader fileReader = new BufferedReader(new FileReader(DICTIONARY_FILENAME));
         String line;
 
@@ -46,6 +47,29 @@ public class AspectAggregation {
     }
 
     /**
+     *
+     * @return list of aspect categories
+     */
+    public static ArrayList<String> getAspectCategories() {
+        if (aspectCategoryDicts.isEmpty()) {
+            try {
+                initDict();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        ArrayList<String> labels = new ArrayList<>();
+        for (String categoryName : aspectCategoryDicts.keySet()) {
+            labels.add(categoryName);
+        }
+        labels. add(OTHER_CATEGORY);
+
+        return labels;
+    }
+    
+    /**
      * aggregate aspect sentiment based on dictionary
      *
      * @param aspectSentiments list of aspect sentiment to be aggregated
@@ -57,7 +81,7 @@ public class AspectAggregation {
         for (AspectSentiment as : aspectSentiments) {
 
             String aspect = as.getAspect();
-            String category = getCategory(aspect);
+            String category = getCategory2(aspect);
 //            System.out.println("category " + as.getAspect() + " = " + category);
             if (aspectAggregations.containsKey(category)) {
                 ArrayList<AspectSentiment> newAS = new ArrayList<>(aspectAggregations.get(category));
@@ -76,13 +100,13 @@ public class AspectAggregation {
     /**
      * categorize aspect based on dictionary
      *
-     * @param aspect aspect
+     * @param aspects aspects
      * @return category of aspect
      * @throws FileNotFoundException dictionary not found
      */
     public static String getCategory(String aspects) throws FileNotFoundException {
         if (aspectCategoryDicts.isEmpty()) {
-            intDict();
+            initDict();
         }
 
         String category = null;
@@ -106,9 +130,10 @@ public class AspectAggregation {
                         if (cat.compareTo(translates.get(j)) == 0) {
                             found = true;
                             category = categoryName;
-//                                System.out.println("found full" +translates.get(j) +" "+categoryName);
+                                //System.out.println("found full" +translates.get(j) +" "+ categoryName + " "+cat + " dict");
                         } else {
                             double jcn = Wordnet.jcn(translates.get(j), cat);
+                            //System.out.println(categoryName + " "+cat + " "+jcn);
                             if (jcn > max) {
                                 max = jcn;
 //                                    System.out.println("max full" + translates.get(j) + ": " + max + " " + cat);
@@ -137,8 +162,10 @@ public class AspectAggregation {
                             if (cat.compareTo(aspect) == 0) {
                                 found = true;
                                 category = categoryName;
+                                //System.out.println("found no trans " + categoryName + " "+cat + " dict");
                             } else {
                                 double jcn = Wordnet.jcn(aspect, cat);
+                                //System.out.println("found no trans " +categoryName + " "+cat + " "+jcn + " "+aspect);
                                 if (jcn > max) {
                                     max = jcn;
 //                                    System.out.println("max no trans " + aspect + ": " + max + " " + cat);
@@ -150,9 +177,10 @@ public class AspectAggregation {
                                 if (cat.compareTo(trans.get(j)) == 0) {
                                     found = true;
                                     category = categoryName;
-//                                    System.out.println("found " +trans.get(j) +" "+categoryName);
+                                    //System.out.println("found " + categoryName + " "+cat + " dict");
                                 } else {
                                     double jcn = Wordnet.jcn(trans.get(j), cat);
+                                    //System.out.println("found " +trans.get(j)+" "+categoryName + " "+cat + " "+jcn);
                                     if (jcn > max) {
                                         max = jcn;
 //                                        System.out.println("max " + trans.get(j) + ": " + max + " " + cat);
@@ -168,6 +196,142 @@ public class AspectAggregation {
         if (max == 0.0) {
             category = OTHER_CATEGORY;
         }
+        System.out.println("");
+
+        return category;
+    }
+    
+    /**
+     * return the maximum similarity between aspect and dictionary, return POSITIVE INFINITTY if dictionary contains aspect
+     *
+     * @param aspects aspect
+     * @param dict dictionary
+     * @return similarity
+     */
+    private static double findMax( ArrayList<String> aspect, ArrayList<String> dict) {
+        boolean found = false;
+        double max = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < dict.size() && !found; i++) {
+            String seed = dict.get(i);
+
+            for (int j = 0; j < aspect.size() && !found; j++) {
+                if (seed.compareTo(aspect.get(j)) == 0) {
+                    System.out.println(aspect.get(j) + " "+ dict.get(i) + " found");
+                    found = true;
+                    max = Double.POSITIVE_INFINITY;
+                } else {
+                    double jcn = Wordnet.jcn(aspect.get(j), seed);
+                    System.out.println(aspect.get(j) + " "+ dict.get(i) + " "+jcn);
+                    if (jcn > max) {
+                        max = jcn;
+                    }
+                }
+            }
+        }
+        return max;
+    }
+    
+    /**
+     * categorize aspect based on dictionary
+     * *calculate the maximum similarity of each category aspect
+     * @param aspects aspect
+     * @return category of aspect
+     * @throws FileNotFoundException dictionary not found
+     */
+    public static String getCategory2(String aspects) throws FileNotFoundException {
+        System.out.println("---->"+ aspects);
+        if (aspectCategoryDicts.isEmpty()) {
+            initDict();
+        }
+
+        String aspectTemp = aspects;
+        if (aspects.endsWith("nya")) {
+            aspectTemp = aspects.substring(0, aspects.length() - 3);
+        }
+
+        ArrayList<String> newAspect = new ArrayList<>();
+        ArrayList<String> translates = Translator.getTranslation(aspectTemp);
+        if (translates != null) { //translate all words
+            newAspect = translates;
+            System.out.println("full trans");
+        } else {
+            //find translate for each token
+            String[] aspectList = aspects.split(" ");
+            ArrayList<String> trans = new ArrayList<>();
+            
+            for (String aspect : aspectList) {
+                if (aspect.endsWith("nya")) {
+                    aspect = aspect.substring(0, aspect.length() - 3);
+                }
+                ArrayList<String> transTemp = Translator.getTranslation(aspect);
+                if (transTemp != null) {
+                    trans.addAll(transTemp);
+                }
+//                System.out.println(transTemp.size());
+//                System.out.println("  "+trans.size());
+            }
+
+            if (trans.isEmpty()) {
+                System.out.println("trans null");
+                for (int i = 0; i < aspectList.length; i++) {
+                    if (aspectList[i].endsWith("nya")) {
+                        newAspect.add(aspectList[i].substring(0, aspectList[i].length() - 3));
+                    } else {
+                        newAspect.add(aspectList[i]);
+                    }
+                }
+                
+            } else {
+                System.out.println("trans ");
+                newAspect = trans;
+            }
+        }
+        
+        String category = null;
+        double max = Double.NEGATIVE_INFINITY;
+        boolean found =false;
+
+        for (String categoryName : aspectCategoryDicts.keySet()) {
+            ArrayList<String> value = aspectCategoryDicts.get(categoryName);
+
+            double jcn = findMax(newAspect, value);
+            if (jcn == Double.POSITIVE_INFINITY) {
+                if (!found) {
+                    found = true;
+                    max = Double.POSITIVE_INFINITY;
+                    category = categoryName;
+                }
+                System.out.println(categoryName + ": found");
+            } else {
+                if (jcn > max) {
+                    max = jcn;
+                    category = categoryName;
+                }
+                System.out.println(categoryName + ": "+ jcn);
+            }
+        }
+        
+        if (max == 0.0) {
+            category = OTHER_CATEGORY;
+        }
+        //postprocess
+        if (found) {
+            boolean inf = false;
+            for (int i = 0; i < newAspect.size() && !inf; i++) {
+                for (String categoryName : aspectCategoryDicts.keySet()) {
+                    ArrayList<String> value = aspectCategoryDicts.get(categoryName);
+                    ArrayList<String> temp = new ArrayList<String>();
+                    temp.add(newAspect.get(i));
+                    double jcn = findMax(temp, value);
+                    
+                    if (jcn == Double.POSITIVE_INFINITY) {
+                        category = categoryName;
+                        inf = true;
+                    }
+                }
+            }
+        }
+        //System.out.println("");
 
         return category;
     }
