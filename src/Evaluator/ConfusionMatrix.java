@@ -51,6 +51,28 @@ public class ConfusionMatrix {
     public String[] getLabel() {
         return this.labels;
     }
+    
+    /**
+     * return the index of label, -1 if not found
+     * @param label label name
+     * @return index of the label
+     */
+    public int getLabelIdx(String label) {
+        boolean found = false;
+        int i= 0;
+        while(!found && i<labels.length){
+            if (labels[i].compareTo(label) == 0) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        if (found) {
+            return i;
+        } else {
+            return -1;
+        }
+    }
 
     /**
      *
