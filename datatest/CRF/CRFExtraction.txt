@@ -86,8 +86,8 @@ minumannya	unik-unik
 masakan	enak
 harga	sesuai
 
-b&b	menyenangkan
-b&b	unik
+b dan b	menyenangkan
+b dan b	unik
 makanan	enak
 kasur	bersih
 kasur	empuk
