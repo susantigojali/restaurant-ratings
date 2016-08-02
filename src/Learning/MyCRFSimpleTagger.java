@@ -139,7 +139,7 @@ public class MyCRFSimpleTagger {
     public static void main(String[] args) throws Exception {
        // Training CRF
         String trainFilename = "dataset/CRF/CRFDatasetFULL2 (992).txt";
-        String modelFilename = "dataset/CRF/crfFULL2 (992).model";
+        String modelFilename = "dataset/CRF/crfFULL2 new (992).model";
         int folds = 10;
         myTrain(trainFilename, modelFilename, folds);
 
@@ -220,26 +220,26 @@ public class MyCRFSimpleTagger {
                     connectedOption.value, iterationsOption.value,
                     gaussianVarianceOption.value, crf);
 
-            System.out.println("\n\nPrint model ke file..");
-            ObjectOutputStream s
-                    = new ObjectOutputStream(new FileOutputStream(modelFilename));
-            s.writeObject(crf);
-            s.close();
-
-            if (trainingFile != null) {
-                trainingFile.close();
-            }
-
             cm[folds] = getConfusionMatrixEvaluation(crf, testSplit);
             folds++;
         }
+        
+        crf = train(data, null, eval,
+                    ordersOption.value, defaultOption.value,
+                    forbiddenOption.value, allowedOption.value,
+                    connectedOption.value, iterationsOption.value,
+                    gaussianVarianceOption.value, crf);
 
+        System.out.println("\n\nPrint model ke file..");
+        ObjectOutputStream s = new ObjectOutputStream(new FileOutputStream(modelFilename+"new"));
+        s.writeObject(crf);
+        s.close();
+     
         //Confusion Matrix for All Cross Validation
         System.out.println("=======CROSS VALIDATION EVALUATION=======");
         ConfusionMatrix cmAll = ConfusionMatrix.getCrossValidationCM(cm);
         cmAll.printConfusionMatrix();
         cmAll.printEvaluation();
-
     }
 
     /**
@@ -487,7 +487,10 @@ public class MyCRFSimpleTagger {
                 }
             }
         }
-
+        crf.print();
+        System.out.println("=======");
+        System.out.println(crf.getParameters());
+        System.out.println("=======");
         return crf;
     }
 
