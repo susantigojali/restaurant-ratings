@@ -199,4 +199,51 @@ public class Reader {
         
         return actualAspectAggregations;
     }
+    
+    /**
+     * Read list of sequence tagging from file
+     * @param fileName file name
+     * @return list of sequence tagging
+     * @throws FileNotFoundException Exception if file can not be found
+     */
+    public static ArrayList<ArrayList<SequenceTagging>> readSequenceTagging(String fileName) throws FileNotFoundException {
+        ArrayList<ArrayList<SequenceTagging>> actualTokenClassification = new ArrayList<>();
+        
+        BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+
+        try {
+            String line;
+            ArrayList<SequenceTagging> st = new ArrayList<>();
+            ArrayList<Feature> features = new ArrayList<>();
+            ArrayList<String> outputs = new ArrayList<>();
+            
+            while ((line = fileReader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    if (line.equals("==")){ //new review
+                        actualTokenClassification.add(st);
+                        features = new ArrayList<>();
+                        outputs = new ArrayList<>();
+                        st = new ArrayList<>();  
+                    } else {
+                        String[] token = line.split(TAB);
+                        assert token.length == 3;
+                        features.add(new Feature(token[0], token[1]));
+                        outputs.add(token[2]);
+                    }
+                } else {
+                    st.add(new SequenceTagging(features, outputs));
+                    features = new ArrayList<>();
+                    outputs = new ArrayList<>();
+                } 
+            }
+            if (!st.isEmpty()) {
+                actualTokenClassification.add(st);                     
+            }
+
+        } catch (IOException ex) {
+            System.out.println("IO Exception: readActualAspectAggregation");
+        }
+
+        return actualTokenClassification;
+    }
 }
