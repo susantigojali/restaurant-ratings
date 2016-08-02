@@ -1,6 +1,6 @@
 all u can eat	makan sepuasnya
 all you can eat	makan sepuasnya
-and		dan
+and	dan
 ambience	suasana
 ambiencenya	suasananya
 awesome	mengagumkan
@@ -9,7 +9,7 @@ beveragenya	minumannya
 breakfast	sarapan
 breakfast-nya	sarapannya
 breakfastnya	sarapannya
-but		tapi
+but	tapi
 cake	kue
 cakenya	kuenya
 cheap	murah
@@ -34,10 +34,12 @@ dinner	makan malam
 dinnernya	makan malamnya
 elegant	anggun
 expensive	mahal
+extraordinary	luar biasa
 fair	adil
 favourite food	makanan kesukaan
 favourite	kesukaan
 favorite	kesukaan
+free	gratis
 fresh	segar
 food	makanan
 friendly	ramah
@@ -47,14 +49,18 @@ good job	kerja bagus
 i	saya
 juice	jus
 juicy	enak
+love	suka
 non smoking	tidak merokok
+not	tidak
 or	atau
 overall	secara keseluruhan
 portion	porsi
 recommended	disarankan
 reasonable	pantas
+relative	relatif
 relax	bersantai
 restaurant	restoran
+romantic	romantis
 service	pelayanan
 servicenya	pelayanannya
 so so	biasa saja
@@ -82,5 +88,5 @@ worth it	setimpal
 venue	tempat
 venuenya	tempatnya
 venue-nya	tempatnya
-you		kamu
+you	kamu
 yummy	enak

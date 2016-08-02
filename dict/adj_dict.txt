@@ -20,7 +20,6 @@ acak
 acak-acakan
 acap
 acapkali
-aci
 aco-acoan
 acuh
 ad interim
@@ -86,7 +85,6 @@ akur
 akurat
 akustik
 akut
-ala
 terala
 alah
 alaihiasalam
@@ -298,7 +296,6 @@ bandel
 bangai
 terbangai
 bangat
-banget
 kebangetan
 bangga
 berbangga
@@ -498,7 +495,6 @@ biadab
 biadat
 biak
 biang
-biar
 biasa
 bibliografis
 bibliomani
@@ -530,7 +526,6 @@ biram
 biring
 birokratis
 kebiru-biruan
-bisa
 bisai kl
 biseksual
 bising
@@ -1390,7 +1385,6 @@ gurusau
 menggurusau
 gusar
 guyub
-habis
 habis-habis
 hakiki
 hakimah
@@ -1419,7 +1413,6 @@ harfiah
 harmonis
 haru
 harum
-seharusnya
 hasad
 hasai
 hasan
@@ -1637,7 +1630,6 @@ jelah
 jelak
 jelalat
 jelalatan
-jelang
 jelas
 jelata
 jelek
@@ -1891,7 +1883,6 @@ kelalap (kelelep)
 kelam
 kelambur
 kelang-kelok
-kelas
 kelat
 kelebek
 kelengar
@@ -2239,7 +2230,6 @@ kudus
 kufur
 kujur
 kukuh
-kuliner
 kultural
 kulup
 kumal
@@ -2515,7 +2505,6 @@ lesu
 leta
 letai
 letah-letai
-letak
 letal
 letih
 lewah
@@ -2702,7 +2691,6 @@ maksimal
 makul
 mala
 termala
-malam
 malang
 malap
 malis
@@ -2845,7 +2833,6 @@ mentereng
 mentolo
 mentul-mentul
 mepet
-merah
 merajak
 merak
 merak hati
@@ -3124,7 +3111,6 @@ ofisial
 ogah-agih
 ogak-agik
 ogel
-okok
 olak
 berolak
 olang-aling
@@ -3134,7 +3120,6 @@ ongah-ongih
 ongok
 ontologis
 onyak-anyik
-open
 operasional
 operatif
 oportunistis
@@ -3499,7 +3484,6 @@ ra.di.si.ko.la
 rafi
 topi
 dsb
-ragam
 ragib
 ragu
 ragu-ragu
@@ -3735,7 +3719,6 @@ rudu
 rugi
 ruit
 rukun
-rum
 rumahan
 rumbing
 rumbu
@@ -4063,7 +4046,6 @@ sewot-sewotan
 sial
 anak --,
 siang-siang
-siang
 siau
 sibar
 bersibar
@@ -4204,7 +4186,6 @@ sreg
 sregep
 stabil
 stagnan
-standar
 stasioner
 statis
 statistis
@@ -4246,7 +4227,6 @@ sufistik
 sugih
 sugul
 suhad
-suka
 sesuka
 sesuka-suka
 sukacita
@@ -4403,7 +4383,6 @@ telepatik
 teles
 telik
 teliti
-telor
 telus
 telut
 temaah
@@ -4455,7 +4434,6 @@ termolabil
 terondol
 tertib
 teruk
-terus
 terus terang
 tetal
 teteh

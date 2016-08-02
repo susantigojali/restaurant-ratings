@@ -15,7 +15,6 @@ scenery
 view
 decoration
 toilet
-bathroom
 sofa
 chair
 table
@@ -26,5 +25,7 @@ weather
 
 #service
 waiter
+waitress
+employee
 service
 
