@@ -16,10 +16,13 @@ import java.util.logging.Logger;
  *
  * @author susanti_2
  */
+
 public class AspectAggregationEvaluator {
 
     private static double precision;
     private static double recall;
+    
+    private static ConfusionMatrix cm; //for evaluation with annotated label
 
     /**
      * Evaluate prediction from actual aspect aggregation
@@ -57,7 +60,7 @@ public class AspectAggregationEvaluator {
             recall = (double) correct / act;
         }
     }
-
+    
     private static boolean contain(AspectSentiment pred, ArrayList<AspectSentiment> act) {
         boolean found = false;
         for (int i = 0; i < act.size() && !found; i++) {
@@ -67,6 +70,58 @@ public class AspectAggregationEvaluator {
             }
         }
         return found;
+    }
+    
+    /**
+     * Evaluate prediction from actual aspect aggregation with confusion matrix
+     * *only works if predict and actual has the same aspect and sentiment
+     * @param prediction prediction aspect aggregation
+     * @param actual actual aspect aggregation
+     */
+    public static void evaluateWithConfusionMatrix(LinkedHashMap<String, ArrayList<AspectSentiment>> prediction, LinkedHashMap<String, ArrayList<AspectSentiment>> actual) {
+        if (prediction.isEmpty()) {
+            System.out.println("prediction empty");
+        } else {
+            ArrayList<String> aspectCategories = AspectAggregation.getAspectCategories();
+            cm = new ConfusionMatrix(aspectCategories.size());
+            String[] labels = aspectCategories.toArray(new String[aspectCategories.size()]);
+            cm.setLabel(labels);
+            
+
+            for (Entry<String, ArrayList<AspectSentiment>> entry : actual.entrySet()) {
+                String category = entry.getKey();
+                ArrayList<AspectSentiment> actualsAS = entry.getValue();
+                
+                for (AspectSentiment actAS : actualsAS) {
+                    String categoryPredict = findCategory(actAS, prediction);
+                    if (categoryPredict != null) {
+                        int idxCatActual = cm.getLabelIdx(category);
+                        int idxCatPredict = cm.getLabelIdx(categoryPredict);
+                        int value = cm.getCM(idxCatActual, idxCatPredict);
+                        cm.setCM(idxCatActual, idxCatPredict, value+1);
+                    } else {
+                        System.out.println("aspect sentimentnya ga sesuai! harus sesuai!");
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Find category of aspect sentiment in actual list
+     */
+    private static String findCategory(AspectSentiment as, LinkedHashMap<String, ArrayList<AspectSentiment>> actual) {
+        boolean found = false;
+        String category = null;
+        for (Entry<String, ArrayList<AspectSentiment>> entry : actual.entrySet()) {
+            if (!found) {
+                if (contain(as, entry.getValue())) {
+                    found = true;
+                    category = entry.getKey();
+                }
+            }
+        }
+        return category;
     }
 
     /**
@@ -104,6 +159,14 @@ public class AspectAggregationEvaluator {
             return (2 * precision * recall) / (precision + recall);
         }
     }
+    
+    /**
+     *
+     * @return confusion matrix
+     */
+    public static ConfusionMatrix getCM() {
+        return cm;
+    }
 
     /**
      *
@@ -120,9 +183,11 @@ public class AspectAggregationEvaluator {
             ArrayList<ArrayList<AspectSentiment>> actualAspectSentiments = Reader.readActualAspectSentiment(dataExtractionAS);
 
             int INDEX = 0;
+            ArrayList<ConfusionMatrix> cmAll = new ArrayList<>();
             for (ArrayList<AspectSentiment> as : actualAspectSentiments) {
                 LinkedHashMap<String, ArrayList<AspectSentiment>> aggregation = AspectAggregation.aggregation(as);
                 AspectAggregationEvaluator.evaluate(aggregation, actualAspectAggregations.get(INDEX));
+                AspectAggregationEvaluator.evaluateWithConfusionMatrix(aggregation, actualAspectAggregations.get(INDEX));
                 System.out.println(INDEX);
                 if (AspectAggregationEvaluator.getF1() < 0.7) {
                     System.out.println("+++++++");
@@ -150,6 +215,8 @@ public class AspectAggregationEvaluator {
                 fAgg += AspectAggregationEvaluator.getF1();
                 precAgg += AspectAggregationEvaluator.getPrecision();
                 recAgg += AspectAggregationEvaluator.getRecall();
+                
+                cmAll.add(AspectAggregationEvaluator.getCM());
                 INDEX++;
             }
 
@@ -157,7 +224,10 @@ public class AspectAggregationEvaluator {
             System.out.println("prec:  " + precAgg / actualAspectSentiments.size());
             System.out.println("rec: " + recAgg / actualAspectSentiments.size());
             System.out.println("f1: " + fAgg / actualAspectSentiments.size());
-
+            
+            ConfusionMatrix cmCV = ConfusionMatrix.getCrossValidationCM(cmAll.toArray(new ConfusionMatrix[cmAll.size()]));
+            cmCV.printConfusionMatrix();
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AspectAggregationEvaluator.class.getName()).log(Level.SEVERE, null, ex);
         }
